@@ -5,7 +5,10 @@ defmodule FypWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", FypWeb do
+  scope "/pets", FypWeb do
     pipe_through :api
+
+    get "/", PetController, :pet_list
+    get "/:id", PetController, :pet
   end
 end
