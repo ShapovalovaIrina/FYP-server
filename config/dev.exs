@@ -4,8 +4,8 @@ use Mix.Config
 config :fyp, Fyp.Repo,
   username: "postgres",
   password: "postgres",
-  database: "fyp_dev",
-  hostname: "localhost",
+  database: "fyp",
+  hostname: "pghost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
