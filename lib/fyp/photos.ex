@@ -6,7 +6,7 @@ defmodule Fyp.Photos do
   alias Schemas.Photos
   require Logger
 
-  def create_all(%{photos: photos}, pet_id) do
+  def create_all(%{"photos" => photos}, pet_id) do
     photos
     |> Enum.map(fn url -> %{photo_url: url, pets_id: pet_id} end)
     |> Enum.each(fn params -> create(params) end)
@@ -27,5 +27,9 @@ defmodule Fyp.Photos do
         Logger.warn("Insertion failed. Reason: #{inspect(reason)}")
         :error
     end
+  end
+
+  def struct_list_to_map_list(list) do
+    Enum.map(list, fn struct -> struct.photo_url end)
   end
 end
