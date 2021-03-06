@@ -10,13 +10,13 @@ defmodule Fyp.WebScraping do
       |> get_pets_html_body
       |> Enum.map(fn body ->
         %{
-          name: get_pet_name(body),
-          breed: get_pet_breed(body),
-          gender: get_pet_gender(body),
-          birth: get_pet_birthday(body),
-          height: get_pet_height(body),
-          description: get_pet_description(body),
-          photos: get_pet_photos(body),
+          "name" => get_pet_name(body),
+          "breed" => get_pet_breed(body),
+          "gender" => get_pet_gender(body),
+          "birth" => get_pet_birthday(body),
+          "height" => get_pet_height(body),
+          "description" => get_pet_description(body),
+          "photos" => get_pet_photos(body),
         }
       end)
   end

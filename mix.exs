@@ -4,7 +4,7 @@ defmodule Fyp.MixProject do
   def project do
     [
       app: :fyp,
-      version: "0.1.2",
+      version: "0.1.3",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix] ++ Mix.compilers(),
@@ -45,7 +45,11 @@ defmodule Fyp.MixProject do
 
       # Web scraping deps
       {:httpoison, "~> 1.8"},
-      {:floki, "~> 0.30.0"}
+      {:floki, "~> 0.30.0"},
+
+      # GraphQL deps
+      {:absinthe, "~> 1.6.3"},
+      {:absinthe_plug, "~> 1.5"}
     ]
   end
 

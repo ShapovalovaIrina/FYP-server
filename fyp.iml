@@ -13,6 +13,11 @@
       <excludeFolder url="file://$MODULE_DIR$/deps" />
       <excludeFolder url="file://$MODULE_DIR$/doc" />
       <excludeFolder url="file://$MODULE_DIR$/logs" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/absinthe" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/nimble_parsec" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/absinthe" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/nimble_parsec" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/absinthe_plug" />
     </content>
     <orderEntry type="jdk" jdkName="Elixir" jdkType="Elixir SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -52,5 +57,10 @@
     <orderEntry type="library" name="mimic" level="project" />
     <orderEntry type="library" name="httparrot" level="project" />
     <orderEntry type="library" name="earmark" level="project" />
+    <orderEntry type="library" name="absinthe" level="project" />
+    <orderEntry type="library" name="nimble_parsec" level="project" />
+    <orderEntry type="library" name="dataloader" level="project" />
+    <orderEntry type="library" name="mix_test_watch" level="project" />
+    <orderEntry type="library" name="absinthe_plug" level="project" />
   </component>
 </module>

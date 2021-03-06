@@ -5,13 +5,13 @@ defmodule PetsTest do
   alias Fyp.Pets
 
   @data %{
-    name: "Демьян",
-    breed: "метис",
-    gender: "мальчик",
-    birth: "Июл 2020",
-    height: "50 см",
-    description: "Общительный, ласковый песик.",
-    photos: ["/media/photologue/photos/VTzN9xCbeWg.jpg",
+    "name" => "Демьян",
+    "breed" => "метис",
+    "gender" => "мальчик",
+    "birth" => "Июл 2020",
+    "height" => "50 см",
+    "description" => "Общительный, ласковый песик.",
+    "photos" => ["/media/photologue/photos/VTzN9xCbeWg.jpg",
       "/media/photologue/photos/mQDrbrDU_z0.jpg",
       "/media/photologue/photos/_ncHhW9vlX4.jpg",
       "/media/photologue/photos/jpMWEsPU9VI.jpg",
@@ -20,21 +20,20 @@ defmodule PetsTest do
   }
 
   test "Pet data (with photos) insertion" do
-    str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
-    {:ok, _id} = Pets.create(str_data)
+    {:ok, _id} = Pets.create(@data)
   end
 
   test "Get pet list data" do
-    str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
-    {:ok, id} = Pets.create(str_data)
+    {:ok, id} = Pets.create(@data)
     first_pet = Pets.pet_list()
-    assert first_pet == [Map.put(@data, :id, id)]
+    atom_data = Map.new(@data, fn {k, v} -> {String.to_atom(k), v} end)
+    assert first_pet == [Map.put(atom_data, :id, id)]
   end
 
   test "Get pet by id" do
-    str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
-    {:ok, pet_id} = Pets.create(str_data)
+    {:ok, pet_id} = Pets.create(@data)
     {:ok, pet_data} = Pets.pet_by_id(pet_id)
-    assert pet_data == Map.put(@data, :id, pet_id)
+    atom_data = Map.new(@data, fn {k, v} -> {String.to_atom(k), v} end)
+    assert pet_data == Map.put(atom_data, :id, pet_id)
   end
 end

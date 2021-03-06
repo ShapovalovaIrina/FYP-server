@@ -12,7 +12,7 @@ defmodule Fyp.Photos do
     |> Enum.each(fn params -> create(params) end)
   end
 
-  def create(%{photo_url: _, pets_id: _} = photo_params, on_conflict \\ :replace_all) do
+  def create(%{photo_url: _, pets_id: pet_id} = photo_params, on_conflict \\ :replace_all) do
     opts = [
       on_conflict: on_conflict,
       conflict_target: :id
@@ -21,10 +21,9 @@ defmodule Fyp.Photos do
     changeset = Photos.changeset(%Photos{}, photo_params)
     case Fyp.Repo.insert(changeset, opts) do
       {:ok, _struct} ->
-        Logger.info("Insert pet photo")
         :ok
       {:error, reason} ->
-        Logger.warn("Insertion failed. Reason: #{inspect(reason)}")
+        Logger.warn("Photo insertion failed for pet #{pet_id}}. Reason: #{inspect(reason)}")
         :error
     end
   end
