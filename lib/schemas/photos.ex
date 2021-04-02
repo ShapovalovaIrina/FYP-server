@@ -16,7 +16,6 @@ defmodule Schemas.Photos do
   schema "photos" do
     field :photo_url, :string
     belongs_to :pets, Schemas.Pets, foreign_key: :pets_id, type: :binary_id
-    timestamps()
   end
 
   def changeset(pet, attrs) do

@@ -12,8 +12,10 @@ defmodule Schemas.Pets do
     - birth (string)
     - height (string)
     - description (string)
+    - shelter_id (id)
 
   Has many photos (One to Many relationship with photos).
+  Belongs to shelter (Many to one relationship with shelters).
   """
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -25,12 +27,12 @@ defmodule Schemas.Pets do
     field :height, :string
     field :description, :string
     has_many :photos, Schemas.Photos
-    timestamps()
+    belongs_to :shelter, Schemas.Shelter, foreign_key: :shelter_id, type: :id
   end
 
   @doc false
   def changeset(pet, attrs) do
     pet
-    |> cast(attrs, [:id, :name, :breed, :gender, :birth, :height, :description])
+    |> cast(attrs, [:id, :name, :breed, :gender, :birth, :height, :description, :shelter_id])
   end
 end

@@ -3,8 +3,6 @@ defmodule PetControllerTest do
   use FypWeb.ConnCase, async: false
   use Plug.Test
 
-  import FypWeb.ControllerUtils
-
   alias Fyp.Pets
 
   @data %{
@@ -19,18 +17,33 @@ defmodule PetControllerTest do
       "/media/photologue/photos/_ncHhW9vlX4.jpg",
       "/media/photologue/photos/jpMWEsPU9VI.jpg",
       "/media/photologue/photos/KHqFllxPeAk.jpg",
-      "/media/photologue/photos/xoOK2tMRMOU.jpg"]
+      "/media/photologue/photos/xoOK2tMRMOU.jpg"],
+    "shelter_id" => 1
+  }
+
+  @shelter_data %{
+    "title" => "Shelter Friend",
+    "vk_link" => "",
+    "site_link" => ""
   }
 
   test "Get pet list", %{conn: conn} do
     {:ok, id} = Pets.create(@data)
     c = get(conn, "/pets")
-    assert json_response(c, 200) == [Map.put(@data, "id", id)]
+    expected_pet =
+      @data
+      |> Map.merge(%{"id" => id, "shelter" => @shelter_data})
+      |> Map.delete("shelter_id")
+    assert json_response(c, 200) == [expected_pet]
   end
 
   test "Get pet by id", %{conn: conn} do
     {:ok, id} = Pets.create(@data)
     c = get(conn, "/pets/#{id}")
-    assert json_response(c, 200) == Map.put(@data, "id", id)
+    expected_pet =
+      @data
+      |> Map.merge(%{"id" => id, "shelter" => @shelter_data})
+      |> Map.delete("shelter_id")
+    assert json_response(c, 200) == expected_pet
   end
 end

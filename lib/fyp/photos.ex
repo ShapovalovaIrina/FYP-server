@@ -24,7 +24,7 @@ defmodule Fyp.Photos do
         Logger.info("Insert pet photo")
         :ok
       {:error, reason} ->
-        Logger.warn("Insertion failed. Reason: #{inspect(reason)}")
+        Logger.error("Insertion failed. Reason: #{inspect(reason)}")
         :error
     end
   end
