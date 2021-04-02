@@ -11,12 +11,20 @@ defmodule PetsTest do
     birth: "Июл 2020",
     height: "50 см",
     description: "Общительный, ласковый песик.",
-    photos: ["/media/photologue/photos/VTzN9xCbeWg.jpg",
+    photos: [
+      "/media/photologue/photos/VTzN9xCbeWg.jpg",
       "/media/photologue/photos/mQDrbrDU_z0.jpg",
       "/media/photologue/photos/_ncHhW9vlX4.jpg",
       "/media/photologue/photos/jpMWEsPU9VI.jpg",
       "/media/photologue/photos/KHqFllxPeAk.jpg",
-      "/media/photologue/photos/xoOK2tMRMOU.jpg"]
+      "/media/photologue/photos/xoOK2tMRMOU.jpg"],
+    shelter_id: 1
+  }
+
+  @shelter_data %{
+    title: "Shelter Friend",
+    vk_link: "",
+    site_link: ""
   }
 
   test "Pet data (with photos) insertion" do
@@ -28,13 +36,21 @@ defmodule PetsTest do
     str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
     {:ok, id} = Pets.create(str_data)
     first_pet = Pets.pet_list()
-    assert first_pet == [Map.put(@data, :id, id)]
+    expected_pet =
+      @data
+      |> Map.merge(%{id: id, shelter: @shelter_data})
+      |> Map.delete(:shelter_id)
+    assert first_pet == [expected_pet]
   end
 
   test "Get pet by id" do
     str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
     {:ok, pet_id} = Pets.create(str_data)
     {:ok, pet_data} = Pets.pet_by_id(pet_id)
-    assert pet_data == Map.put(@data, :id, pet_id)
+    expected_pet =
+      @data
+      |> Map.merge(%{id: pet_id, shelter: @shelter_data})
+      |> Map.delete(:shelter_id)
+    assert pet_data == expected_pet
   end
 end
