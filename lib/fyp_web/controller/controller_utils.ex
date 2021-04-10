@@ -4,6 +4,7 @@ defmodule FypWeb.ControllerUtils do
   @bad_status %{"status" => "Bad request"}
   @successful_status %{"status" => "Successfully"}
   @not_found_status %{"status" => "Not found"}
+  @no_related_entities %{"status" => "No related entities"}
 
   def bad_status() do
     @bad_status
@@ -15,5 +16,9 @@ defmodule FypWeb.ControllerUtils do
 
   def not_found_status() do
     @not_found_status
+  end
+
+  def no_related_entities() do
+    @no_related_entities
   end
 end

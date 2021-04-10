@@ -18,7 +18,8 @@ defmodule Schemas.Users do
     field :email, :string
     many_to_many :pets, Schemas.Pets,
                  join_through: "favourite_pets",
-                 join_keys: [user_id: :id, pet_id: :id]
+                 join_keys: [user_id: :id, pet_id: :id],
+                 on_replace: :delete
   end
 
   def changeset(pet, attrs) do

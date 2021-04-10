@@ -49,4 +49,15 @@ defmodule Fyp.Users do
         :error
     end
   end
+
+  def map_from_struct(%Users{} = user) do
+    Map.take(user, [
+      :name,
+      :email
+    ])
+  end
+
+  def map_from_struct(_not_user) do
+    {:error, :not_user_struct}
+  end
 end
