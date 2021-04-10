@@ -12,14 +12,13 @@ defmodule Schemas.Photos do
   Belongs to Pets (Many to One relationship with pets).
   """
 
-  @primary_key {:id, :id, autogenerate: true}
+  @primary_key {:photo_url, :string, autogenerate: false}
   schema "photos" do
-    field :photo_url, :string
     belongs_to :pets, Schemas.Pets, foreign_key: :pets_id, type: :binary_id
   end
 
   def changeset(pet, attrs) do
     pet
-    |> cast(attrs, [:id, :photo_url, :pets_id])
+    |> cast(attrs, [:photo_url, :pets_id])
   end
 end

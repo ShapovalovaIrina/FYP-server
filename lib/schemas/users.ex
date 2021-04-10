@@ -19,7 +19,6 @@ defmodule Schemas.Users do
     many_to_many :pets, Schemas.Pets,
                  join_through: "favourite_pets",
                  join_keys: [user_id: :id, pet_id: :id]
-    timestamps()
   end
 
   def changeset(pet, attrs) do

@@ -8,10 +8,11 @@ defmodule Fyp.Pets do
   alias Fyp.{Repo, Photos}
   require Logger
 
-  def create(pet_with_photos, on_conflict \\ :replace_all) do
+  def create(pet_with_photos) do
     opts = [
-      on_conflict: on_conflict,
-      conflict_target: :id
+      returning: [:id],
+      on_conflict: {:replace_all_except, [:id]},
+      conflict_target: {:unsafe_fragment, "(name, shelter_id)"}
     ]
 
     {photos, pet_params} = Map.split(pet_with_photos, ["photos"])
@@ -20,12 +21,12 @@ defmodule Fyp.Pets do
 
     case Repo.insert(changeset, opts) do
       {:ok, %Pets{id: uuid}} ->
-        Logger.info("Insert pet with uuid: #{uuid}")
+        Logger.info("Insert pet with uuid: #{uuid}.")
         res = Fyp.Photos.create_all(photos, uuid)
         {res, uuid}
 
       {:error, reason} ->
-        Logger.warn("Insertion failed. Reason: #{inspect(reason)}")
+        Logger.warn("Pet insertion failed. Reason: #{inspect(reason)}")
         :error
     end
   end
@@ -83,7 +84,7 @@ defmodule Fyp.Pets do
     ])
   end
 
-  defp struct_shelter_to_map_shelter(incorrect_input) do
+  defp struct_shelter_to_map_shelter(_incorrect_input) do
     %{}
   end
 end

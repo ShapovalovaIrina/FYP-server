@@ -12,10 +12,10 @@ defmodule Fyp.Photos do
     |> Enum.each(fn params -> create(params) end)
   end
 
-  def create(%{photo_url: _, pets_id: _} = photo_params, on_conflict \\ :replace_all) do
+  def create(%{photo_url: _, pets_id: _} = photo_params, on_conflict \\ :nothing) do
     opts = [
       on_conflict: on_conflict,
-      conflict_target: :id
+      conflict_target: :photo_url
     ]
 
     changeset = Photos.changeset(%Photos{}, photo_params)

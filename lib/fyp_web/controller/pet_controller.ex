@@ -6,7 +6,6 @@ defmodule FypWeb.PetController do
   use FypWeb, :controller
   import FypWeb.ControllerUtils
   alias Fyp.Pets
-  alias Fyp.Photos
 
   @doc "Get pet list from server"
   def pet_list(conn, _params) do
