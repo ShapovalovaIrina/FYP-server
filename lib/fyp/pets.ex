@@ -23,7 +23,7 @@ defmodule Fyp.Pets do
       {:ok, %Pets{id: uuid}} ->
         Logger.info("Insert pet with uuid: #{uuid}.")
         res = Fyp.Photos.create_all(photos, uuid)
-        {:ok, uuid}
+        {res, uuid}
 
       {:error, reason} ->
         Logger.warn("Pet insertion failed. Reason: #{inspect(reason)}")
