@@ -1,9 +1,9 @@
 defmodule FypWeb.ControllerUtils do
   @moduledoc "Just simple response texts"
 
-  @bad_status %{status: "Bad request"}
-  @successful_status %{status: "Successfully"}
-  @not_found_status %{status: "Not found"}
+  @bad_status %{"status" => "Bad request"}
+  @successful_status %{"status" => "Successfully"}
+  @not_found_status %{"status" => "Not found"}
 
   def bad_status() do
     @bad_status
