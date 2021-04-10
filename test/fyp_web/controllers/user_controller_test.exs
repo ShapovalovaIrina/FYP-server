@@ -4,7 +4,6 @@ defmodule UserControllerTest do
   use Plug.Test
 
   import FypWeb.ControllerUtils
-  alias Fyp.Users
 
   @user_data %{
     name: "Username",

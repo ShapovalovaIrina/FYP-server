@@ -5,8 +5,6 @@ defmodule Fyp.Favourites do
   alias Fyp.Repo
   alias Schemas.{Users, Pets}
 
-  require Logger
-
   def add_favourite_for_user(user_id, pet_id) do
     case Repo.get(Users, user_id) do
       nil -> {:error, :not_found}
@@ -23,35 +21,41 @@ defmodule Fyp.Favourites do
 
   defp add_pet_assoc(%Users{} = user, pet_id) do
     case Repo.get(Pets, pet_id) do
-      nil -> {:error, :not_found}
+      nil ->
+        {:error, :not_found}
+
       pet ->
-        {data, changeset} = pet_preloaded_changeset(pet)
-        pet_with_user = Ecto.Changeset.put_assoc(changeset, :users, [user | data.users])
-        Repo.update(pet_with_user)
+        {data, changeset} = user_preloaded_changeset(user)
+        user_with_pets = Ecto.Changeset.put_assoc(changeset, :pets, [pet | data.pets])
+        Repo.update(user_with_pets)
     end
   end
 
   defp delete_pet_assoc(%Users{} = user, pet_id) do
     case Repo.get(Pets, pet_id) do
-      nil -> {:error, :not_found}
+      nil ->
+        {:error, :not_found}
+
       pet ->
-        {data, changeset} = pet_preloaded_changeset(pet)
-        remove_user(data.users, changeset, user)
+        {data, changeset} = user_preloaded_changeset(user)
+        remove_pet(data.pets, changeset, pet)
     end
   end
 
-  defp pet_preloaded_changeset(pet) do
-    preloaded_data = Repo.preload(pet, :users)
+  defp user_preloaded_changeset(user) do
+    preloaded_data = Repo.preload(user, :pets)
     {preloaded_data, Ecto.Changeset.change(preloaded_data)}
   end
 
-  defp remove_user([], _changeset, _user) do
-    {:error, :no_related_user}
+  defp remove_pet([], _changeset, _pet) do
+    {:error, :no_related_pets}
   end
 
-  defp remove_user(users, changeset, user) do
-    pet_with_user = Ecto.Changeset.put_assoc(changeset, :users, Enum.filter(users, fn u -> u.id != user.id end))
-    Repo.update(pet_with_user)
+  defp remove_pet(pets, changeset, pet) do
+    user_with_pets =
+      Ecto.Changeset.put_assoc(changeset, :pets, Enum.filter(pets, fn p -> p.id != pet.id end))
+
+    Repo.update(user_with_pets)
   end
 
   def get_assoc_pets(user_id) do
