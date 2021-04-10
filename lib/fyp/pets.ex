@@ -47,7 +47,7 @@ defmodule Fyp.Pets do
     end
   end
 
-  defp map_from_pet_struct(struct) do
+  def map_from_pet_struct(struct) do
     with map <-
            Map.take(struct, [
              :id,

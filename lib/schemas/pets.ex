@@ -28,6 +28,9 @@ defmodule Schemas.Pets do
     field :description, :string
     has_many :photos, Schemas.Photos
     belongs_to :shelter, Schemas.Shelter, foreign_key: :shelter_id, type: :id
+    many_to_many :users, Schemas.Users,
+                 join_through: "favourite_pets",
+                 join_keys: [pet_id: :id, user_id: :id]
   end
 
   @doc false
