@@ -5,6 +5,8 @@ defmodule FypWeb.ControllerUtils do
   @successful_status %{"status" => "Successfully"}
   @not_found_status %{"status" => "Not found"}
   @no_related_entities %{"status" => "No related entities"}
+  @forbidden_access %{"status" => "Access forbidden"}
+  @unauthenticated %{"status" => "Unauthenticated"}
 
   def bad_status() do
     @bad_status
@@ -20,5 +22,13 @@ defmodule FypWeb.ControllerUtils do
 
   def no_related_entities() do
     @no_related_entities
+  end
+
+  def unauthenticated do
+    @unauthenticated
+  end
+
+  def forbidden_access do
+    @forbidden_access
   end
 end

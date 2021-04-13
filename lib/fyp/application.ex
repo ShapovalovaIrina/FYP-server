@@ -4,6 +4,7 @@ defmodule Fyp.Application do
   @moduledoc false
 
   use Application
+  import Supervisor.Spec
 
   def start(_type, _args) do
     children = [
@@ -14,15 +15,25 @@ defmodule Fyp.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Fyp.PubSub},
       # Start the Endpoint (http/https)
-      FypWeb.Endpoint
+      FypWeb.Endpoint,
       # Start a worker by calling: Fyp.Worker.start_link(arg)
       # {Fyp.Worker, arg}
+      # TODO deprecated
+      worker(Task, [&Fyp.Migrator.migrate/0], restart: :transient)
     ]
+
+    additional_children =
+      case Confex.fetch_env!(:fyp, :key_source) do
+        :env ->
+          opts = [time_interval: 5 * 60_000]
+          [{Fyp.Token.Strategy, opts}]
+        :config -> []
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Fyp.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children ++ additional_children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration

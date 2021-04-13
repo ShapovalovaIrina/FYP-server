@@ -6,8 +6,6 @@ defmodule FavouriteDataTest do
   alias Fyp.Pets
   alias Fyp.Users
 
-  require Logger
-
   @pet_data %{
     name: "Демьян",
     breed: "метис",
@@ -30,6 +28,7 @@ defmodule FavouriteDataTest do
   }
 
   @user_data %{
+    id: "ty6kse",
     name: "Username",
     email: "user@mail.com"
   }
@@ -65,7 +64,7 @@ defmodule FavouriteDataTest do
   test "Add favourite to non-existent user" do
     str_data = Map.new(@pet_data, fn {k, v} -> {Atom.to_string(k), v} end)
     {:ok, pet_id} = Pets.create(str_data)
-    user_id = 1000
+    user_id = "1000"
 
     {:error, :not_found} = Favourites.add_favourite_for_user(user_id, pet_id)
 
@@ -110,7 +109,7 @@ defmodule FavouriteDataTest do
   test "Delete favourite from non-existent user" do
     str_data = Map.new(@pet_data, fn {k, v} -> {Atom.to_string(k), v} end)
     {:ok, pet_id} = Pets.create(str_data)
-    user_id = 1000
+    user_id = "1000"
 
     {:error, :not_found} = Favourites.delete_favourite_from_user(user_id, pet_id)
   end

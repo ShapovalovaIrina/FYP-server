@@ -9,7 +9,8 @@ defmodule FypWeb.FavouriteController do
 
   require Logger
 
-  def add_favourite_pet(conn, %{"id" => user_id, "pet_id" => pet_id} = _params) do
+  def add_favourite_pet(conn, %{"pet_id" => pet_id} = _params) do
+    %{"user_id" => user_id} = conn.assigns.authentication.claims
     case Favourites.add_favourite_for_user(user_id, pet_id) do
       {:ok, _user} ->
         conn |> put_status(200) |> json(successful_status())
@@ -23,7 +24,8 @@ defmodule FypWeb.FavouriteController do
     end
   end
 
-  def remove_favourite_pet(conn, %{"id" => user_id, "pet_id" => pet_id} = _params) do
+  def remove_favourite_pet(conn, %{"pet_id" => pet_id} = _params) do
+    %{"user_id" => user_id} = conn.assigns.authentication.claims
     case Favourites.delete_favourite_from_user(user_id, pet_id) do
       {:ok, _user} ->
         conn |> put_status(200) |> json(successful_status())

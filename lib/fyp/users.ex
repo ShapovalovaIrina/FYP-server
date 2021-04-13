@@ -8,9 +8,9 @@ defmodule Fyp.Users do
 
   require Logger
 
-  def create(%{name: _, email: _} = user_params) do
+  def create(%{id: _, name: _, email: _} = user_params, replace_opt \\ :replace_all) do
     opts = [
-      on_conflict: :nothing,
+      on_conflict: replace_opt,
       conflict_target: :id
     ]
 
@@ -35,23 +35,28 @@ defmodule Fyp.Users do
   end
 
   def delete(user_id) do
-    case Repo.delete_all(from u in Users, where: u.id == ^user_id) do
-      {n, _} when n > 0 ->
-        Logger.info("Successfully delete user with id #{user_id}. Number of deleted entities: #{n}.")
-        :ok
-
-      {0, _} ->
-        Logger.warn("No such user. User id: #{user_id}. Number of deleted entities: 0.")
+    with {:ok, user} <- show(user_id),
+         {:ok, _} <- Repo.delete(user) do
+      :ok
+    else
+      {:error, :not_found} ->
         :not_found
 
-      {nil, _} ->
-        Logger.error("User insertion failed.")
+      {:error, changeset} ->
+        Logger.error(
+          "Error in user deletion. User id: #{user_id}. Changeset: #{inspect(changeset)}"
+        )
         :error
     end
   end
 
+  def ensure_exist(%{id: _, name: _, email: _} = user_params) do
+    create(user_params, :nothing)
+  end
+
   def map_from_struct(%Users{} = user) do
     Map.take(user, [
+      :id,
       :name,
       :email
     ])

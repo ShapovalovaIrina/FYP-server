@@ -5,6 +5,11 @@ defmodule FypWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug :accepts, ["json"]
+    plug AuthorizationPlug
+  end
+
   scope "/pets", FypWeb do
     pipe_through :api
 
@@ -13,13 +18,13 @@ defmodule FypWeb.Router do
   end
 
   scope "/users", FypWeb do
-    pipe_through :api
+    pipe_through :auth
 
     post "/", UserController, :create_user
-    get "/:id", UserController, :show_user
-    delete "/:id", UserController, :delete_user
+    get "/", UserController, :show_user
+    delete "/", UserController, :delete_user
 
-    post "/:id/favourite/:pet_id", FavouriteController, :add_favourite_pet
-    delete "/:id/favourite/:pet_id", FavouriteController, :remove_favourite_pet
+    post "/favourite/:pet_id", FavouriteController, :add_favourite_pet
+    delete "/favourite/:pet_id", FavouriteController, :remove_favourite_pet
   end
 end

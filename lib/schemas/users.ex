@@ -12,7 +12,7 @@ defmodule Schemas.Users do
   Many to many relationship with pets through table "favourite_pets".
   """
 
-  @primary_key {:id, :id, autogenerate: true}
+  @primary_key {:id, :string, autogenerate: false}
   schema "users" do
     field :name, :string
     field :email, :string
