@@ -20,3 +20,20 @@ config :fyp, FypWeb.Endpoint,
 
 # Print only info, warnings and errors during test
 config :logger, level: :info
+
+config :fyp,
+  key_source: {:system, :atom, "KEY_SOURCE", :config},
+  config_users: %{
+    "user@mail.com" => %{
+      "email" => "user@mail.com",
+      "email_verified" => true,
+      "name" => "Joe Jonas",
+      "user_id" => "123asdrfv7"
+    },
+    "user_not_verified@mail.com" => %{
+      "email" => "user@mail.com",
+      "email_verified" => false,
+      "name" => "Shawn Mendes",
+      "user_id" => "yjnw951rfv7"
+    }
+  }

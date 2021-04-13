@@ -45,7 +45,15 @@ defmodule Fyp.MixProject do
 
       # Web scraping deps
       {:httpoison, "~> 1.8"},
-      {:floki, "~> 0.30.0"}
+      {:floki, "~> 0.30.0"},
+
+      # JWT library
+      {:joken, "~> 2.3"},
+      {:joken_jwks, "~> 1.4"},
+
+      # Helper module that provides a nice way to read configuration at runtime
+      # from environment variables or via adapter-supported interface
+      {:confex, "~> 3.5"}
     ]
   end
 
