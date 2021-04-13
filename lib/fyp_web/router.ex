@@ -27,9 +27,4 @@ defmodule FypWeb.Router do
     post "/favourite/:pet_id", FavouriteController, :add_favourite_pet
     delete "/favourite/:pet_id", FavouriteController, :remove_favourite_pet
   end
-
-  scope "/auth", FypWeb do
-    pipe_through :auth
-    get "/", TestController, :test_response
-  end
 end

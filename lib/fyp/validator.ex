@@ -41,7 +41,6 @@ defimpl Fyp.Validator, for: Fyp.FirebaseValidator do
   require Logger
 
   def validate(validator, conn, _opts) do
-#    IO.inspect(conn, label: "Firebase Validator, validate, conn")
     case Plug.Conn.get_req_header(conn, "authorization") do
       [] ->
         {:error, conn}
@@ -49,9 +48,7 @@ defimpl Fyp.Validator, for: Fyp.FirebaseValidator do
       [jwt | _] ->
         case verify_token(validator, jwt) do
           {:ok, claims} ->
-#            IO.inspect(claims, label: "verify token :ok, claims")
             conn = Plug.Conn.assign(conn, :authentication, %{:claims => claims})
-#            IO.inspect(conn, label: "verify token :ok, conn (assign authentication claims)")
             {:ok, conn}
 
           {:error, _reason} ->

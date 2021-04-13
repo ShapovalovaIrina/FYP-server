@@ -32,7 +32,6 @@ def sign_in_with_email_and_password(email,
 
 
 token = str(get_token())
-token = token.replace("e", "b")
 r = requests.get("http://localhost:4000/auth", headers={"content-type": "application/json", "authorization": token})
 print('Status code: {0}'.format(r.status_code))
 print('Text: \n{0}'.format(r.text))

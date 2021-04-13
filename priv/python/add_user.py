@@ -5,10 +5,10 @@ import firebase_admin
 from firebase_admin import auth
 from firebase_admin import credentials
 
-cred = credentials.Certificate("/home/irina/Desktop/Find your pet/service/find-your-pet-46ea2-firebase-adminsdk-xdzmp-f31e60bd6b.json")
+cred = credentials.Certificate("/home/irina/Desktop/Find your pet/service/find-your-pet-adminsdk.json")
 app = firebase_admin.initialize_app(cred)
 
-email = 'user_not_verified@example.com'
+email = 'user@example.com'
 email_verified = False
 password = 'secretPassword'
 name = 'John Doe'

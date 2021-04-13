@@ -18,6 +18,7 @@ defmodule Fyp.Application do
       FypWeb.Endpoint,
       # Start a worker by calling: Fyp.Worker.start_link(arg)
       # {Fyp.Worker, arg}
+      # TODO deprecated
       worker(Task, [&Fyp.Migrator.migrate/0], restart: :transient)
     ]
 
@@ -27,7 +28,6 @@ defmodule Fyp.Application do
           opts = [time_interval: 5 * 60_000]
           [{Fyp.Token.Strategy, opts}]
         :config -> []
-        :none -> []
       end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
