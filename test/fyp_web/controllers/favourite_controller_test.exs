@@ -5,7 +5,6 @@ defmodule FavouriteControllerTest do
 
   alias Fyp.Favourites
   alias Fyp.Pets
-  alias Fyp.Users
 
   import FypWeb.ControllerUtils
   import Utils.TestUtils

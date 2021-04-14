@@ -4,10 +4,32 @@ defmodule FypWeb.FavouriteController do
   """
 
   use FypWeb, :controller
+  use OpenApiSpex.ControllerSpecs
   import FypWeb.ControllerUtils
   alias Fyp.Favourites
+  alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus}
 
   require Logger
+
+  tags ["Favourites"]
+  security [%{"authorization" => []}]
+
+  operation :add_favourite_pet,
+    summary: "Add pet with pet ID to favourite of authorized user.",
+    parameters: [
+      id: [
+        in: :path,
+        description: "Pet ID",
+        type: :string,
+        required: true,
+        example: "123e4567-e89b-12d3-a456-426655440000"
+      ]
+    ],
+    responses: %{
+      200 => {"Success", "application/json", SuccessfulStatus},
+      404 => {"Not found", "application/json", NotFoundStatus},
+      400 => {"Bad status", "application/json", BadStatus}
+    }
 
   def add_favourite_pet(conn, %{"pet_id" => pet_id} = _params) do
     %{"user_id" => user_id} = conn.assigns.authentication.claims
@@ -24,6 +46,23 @@ defmodule FypWeb.FavouriteController do
     end
   end
 
+  operation :remove_favourite_pet,
+    summary: "Remove pet with pet ID from favourite of authorized user.",
+    parameters: [
+      id: [
+        in: :path,
+        description: "Pet ID",
+        type: :string,
+        required: true,
+        example: "123e4567-e89b-12d3-a456-426655440000"
+      ]
+    ],
+    responses: %{
+      200 => {"Success", "application/json", SuccessfulStatus},
+      404 => {"Not found", "application/json", NotFoundStatus},
+      400 => {"Bad status", "application/json", BadStatus}
+    }
+
   def remove_favourite_pet(conn, %{"pet_id" => pet_id} = _params) do
     %{"user_id" => user_id} = conn.assigns.authentication.claims
     case Favourites.delete_favourite_from_user(user_id, pet_id) do
@@ -34,7 +73,7 @@ defmodule FypWeb.FavouriteController do
         conn |> put_status(404) |> json(not_found_status())
 
       {:error, :no_related_pets} ->
-        conn |> put_status(404) |> json(no_related_entities())
+        conn |> put_status(404) |> json(not_found_status())
 
       {:error, reason} ->
         Logger.error("Error in favourite controller was caused by: #{inspect(reason)}")

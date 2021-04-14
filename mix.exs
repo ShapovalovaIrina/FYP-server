@@ -53,7 +53,10 @@ defmodule Fyp.MixProject do
 
       # Helper module that provides a nice way to read configuration at runtime
       # from environment variables or via adapter-supported interface
-      {:confex, "~> 3.5"}
+      {:confex, "~> 3.5"},
+
+      # Open API (Swagger)
+      {:open_api_spex, "~> 3.10"}
     ]
   end
 
@@ -68,7 +71,7 @@ defmodule Fyp.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/shelter_seeds.exs", "run priv/repo/pet_seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "run priv/repo/shelter_seeds.exs", "test"]
+      test: ["openapi.spec.json --spec FypWeb.ApiSpec", "ecto.create --quiet", "ecto.migrate --quiet", "run priv/repo/shelter_seeds.exs", "test"]
     ]
   end
 end
