@@ -10,7 +10,7 @@ config :fyp, Fyp.Repo,
   password: {:system, "REPO_PASSWORD"},
   database: {:system, "REPO_DATABASE"},
   hostname: {:system, "REPO_HOSTNAME"},
-  port: {:system, :integer, "ETSP_PORT"},
+  port: {:system, :integer, "REPO_PORT"},
   pool_size: {:system, :integer, "POOL_SIZE", 10}
 
 secret_key_base =
