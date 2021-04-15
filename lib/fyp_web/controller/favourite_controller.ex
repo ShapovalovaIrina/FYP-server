@@ -7,7 +7,7 @@ defmodule FypWeb.FavouriteController do
   use OpenApiSpex.ControllerSpecs
   import FypWeb.ControllerUtils
   alias Fyp.Favourites
-  alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus}
+  alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus, Unauthenticated, AccessForbidden}
 
   require Logger
 
