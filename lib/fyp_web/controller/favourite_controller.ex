@@ -17,7 +17,7 @@ defmodule FypWeb.FavouriteController do
   operation :add_favourite_pet,
     summary: "Add pet with pet ID to favourite of authorized user",
     parameters: [
-      id: [
+      pet_id: [
         in: :path,
         description: "Pet ID",
         type: :string,
@@ -51,7 +51,7 @@ defmodule FypWeb.FavouriteController do
   operation :remove_favourite_pet,
     summary: "Remove pet with pet ID from favourite of authorized user",
     parameters: [
-      id: [
+      pet_id: [
         in: :path,
         description: "Pet ID",
         type: :string,

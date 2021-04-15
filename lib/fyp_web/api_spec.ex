@@ -1,17 +1,14 @@
 defmodule FypWeb.ApiSpec do
-  alias OpenApiSpex.{Components, Info, OpenApi, Paths, Server, SecurityScheme}
-  alias FypWeb.{Endpoint, Router}
+  alias OpenApiSpex.{Components, Info, OpenApi, Paths, SecurityScheme}
+  alias FypWeb.Router
   @behaviour OpenApi
 
   @impl OpenApi
   def spec do
     %OpenApi{
-      servers: [
-        # Populate the Server info from a phoenix endpoint
-        Server.from_endpoint(Endpoint)
-      ],
       info: %Info{
-        title: "FYP app",
+        title: "Find your pet app",
+        description: "API for \"Find your pet\" app server.",
         version: "1.0"
       },
       # Populate the paths from a phoenix router

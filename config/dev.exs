@@ -2,11 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :fyp, Fyp.Repo,
-  username: {:system, "REPO_USERNAME", "postgres"},
-  password: {:system, "REPO_PASSWORD", "postgres"},
-  database: {:system, "REPO_DATABASE", "fyp"},
-  hostname: {:system, "REPO_HOSTNAME", "pghost"},
-  port: {:system, :integer, "REPO_PORT", 5432},
+  username: System.get_env("REPO_USERNAME", "postgres"),
+  password: System.get_env("REPO_PASSWORD", "postgres"),
+  database: System.get_env("REPO_DATABASE", "fyp"),
+  hostname: System.get_env("REPO_HOSTNAME", "pghost"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
