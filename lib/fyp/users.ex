@@ -2,7 +2,6 @@ defmodule Fyp.Users do
   @moduledoc """
   """
 
-  import Ecto.Query
   alias Schemas.Users
   alias Fyp.Repo
 

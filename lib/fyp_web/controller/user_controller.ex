@@ -3,8 +3,23 @@ defmodule FypWeb.UserController do
   Controller for functions which are relative to user data
   """
   use FypWeb, :controller
+  use OpenApiSpex.ControllerSpecs
   import FypWeb.ControllerUtils
   alias Fyp.Users
+  alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus, Unauthenticated, AccessForbidden}
+  alias OpenApi.UsersSchema.User
+
+  tags ["Users"]
+  security [%{"authorization" => []}]
+
+  operation :create_user,
+    summary: "Create user with params from auth token",
+    responses: %{
+      201 => {"Success", "application/json", SuccessfulStatus},
+      400 => {"Bad status", "application/json", BadStatus},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden}
+    }
 
   def create_user(conn, _params) do
     %{"user_id" => id, "name" => name, "email" => email} = conn.assigns.authentication.claims
@@ -14,6 +29,15 @@ defmodule FypWeb.UserController do
     end
   end
 
+  operation :show_user,
+    summary: "Get user info. ID is getting from auth token",
+    responses: %{
+      200 => {"User response", "application/json", User},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden},
+      404 => {"Not found", "application/json", NotFoundStatus}
+    }
+
   def show_user(conn, _params) do
     %{"user_id" => id} = conn.assigns.authentication.claims
     case Users.show(id) do
@@ -21,6 +45,16 @@ defmodule FypWeb.UserController do
       {:error, :not_found} -> conn |> put_status(404) |> json(not_found_status())
     end
   end
+
+  operation :delete_user,
+    summary: "Delete user. ID is getting from auth token",
+    responses: %{
+      200 => {"Success", "application/json", SuccessfulStatus},
+      400 => {"Bad status", "application/json", BadStatus},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden},
+      404 => {"Not found", "application/json", NotFoundStatus}
+    }
 
   def delete_user(conn, _params) do
     %{"user_id" => id} = conn.assigns.authentication.claims

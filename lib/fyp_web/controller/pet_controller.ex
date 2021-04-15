@@ -4,18 +4,43 @@ defmodule FypWeb.PetController do
   """
 
   use FypWeb, :controller
+  use OpenApiSpex.ControllerSpecs
   import FypWeb.ControllerUtils
-  alias Fyp.Pets
+  alias OpenApi.ResponsesSchema.NotFoundStatus
+  alias OpenApi.PetSchemas.{Pet, Pets}
 
-  @doc "Get pet list from server"
+  tags ["Pets"]
+  security [%{}]
+
+  operation :pet_list,
+    summary: "Get all pets",
+    responses: %{
+      200 => {"Pet list", "application/json", Pets}
+    }
+
   def pet_list(conn, _params) do
-    pet_list = Pets.pet_list()
+    pet_list = Fyp.Pets.pet_list()
     conn |> put_status(200) |> json(pet_list)
   end
 
-  @doc "Get pet record (single) by pet id"
+  operation :pet,
+    summary: "Get pet by ID",
+    parameters: [
+      id: [
+        in: :path,
+        description: "Pet ID",
+        type: :string,
+        required: true,
+        example: "123e4567-e89b-12d3-a456-426655440000"
+      ]
+    ],
+    responses: %{
+      200 => {"Pet", "application/json", Pet},
+      404 => {"Not found", "application/json", NotFoundStatus}
+    }
+
   def pet(conn, %{"id" => id} = _params) do
-    case Pets.pet_by_id(id) do
+    case Fyp.Pets.pet_by_id(id) do
       {:ok, pet} -> conn |> put_status(200) |> json(pet)
       {:error, :not_found} -> conn |> put_status(404) |> json(not_found_status())
     end

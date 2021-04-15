@@ -26,6 +26,8 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/joken" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/confex" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/joken_jwks" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/open_api_spex" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/open_api_spex" />
     </content>
     <orderEntry type="jdk" jdkName="Python 2.7" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -88,5 +90,6 @@
     <orderEntry type="library" name="fuse" level="project" />
     <orderEntry type="library" name="mix_test_watch" level="project" />
     <orderEntry type="library" name="confex" level="project" />
+    <orderEntry type="library" name="open_api_spex" level="project" />
   </component>
 </module>
