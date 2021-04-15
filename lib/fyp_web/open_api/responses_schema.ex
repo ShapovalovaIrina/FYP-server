@@ -49,22 +49,6 @@ defmodule OpenApi.ResponsesSchema do
     })
   end
 
-#  defmodule NoRelatedEntitiesStatus do
-#    require OpenApiSpex
-#
-#    OpenApiSpex.schema(%{
-#      description: "No related entities response.",
-#      type: :object,
-#      additionalProperties: false,
-#      properties: %{
-#        status: %Schema{type: :string, enum: ["No related entities"]}
-#      },
-#      example: %{
-#        "status" => "No related entities"
-#      }
-#    })
-#  end
-
   defmodule Unauthenticated do
     require OpenApiSpex
 

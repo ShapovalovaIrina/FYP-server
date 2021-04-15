@@ -15,7 +15,7 @@ defmodule FypWeb.FavouriteController do
   security [%{"authorization" => []}]
 
   operation :add_favourite_pet,
-    summary: "Add pet with pet ID to favourite of authorized user.",
+    summary: "Add pet with pet ID to favourite of authorized user",
     parameters: [
       id: [
         in: :path,
@@ -27,8 +27,10 @@ defmodule FypWeb.FavouriteController do
     ],
     responses: %{
       200 => {"Success", "application/json", SuccessfulStatus},
-      404 => {"Not found", "application/json", NotFoundStatus},
-      400 => {"Bad status", "application/json", BadStatus}
+      400 => {"Bad status", "application/json", BadStatus},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden},
+      404 => {"Not found", "application/json", NotFoundStatus}
     }
 
   def add_favourite_pet(conn, %{"pet_id" => pet_id} = _params) do
@@ -47,7 +49,7 @@ defmodule FypWeb.FavouriteController do
   end
 
   operation :remove_favourite_pet,
-    summary: "Remove pet with pet ID from favourite of authorized user.",
+    summary: "Remove pet with pet ID from favourite of authorized user",
     parameters: [
       id: [
         in: :path,
@@ -59,8 +61,10 @@ defmodule FypWeb.FavouriteController do
     ],
     responses: %{
       200 => {"Success", "application/json", SuccessfulStatus},
-      404 => {"Not found", "application/json", NotFoundStatus},
-      400 => {"Bad status", "application/json", BadStatus}
+      400 => {"Bad status", "application/json", BadStatus},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden},
+      404 => {"Not found", "application/json", NotFoundStatus}
     }
 
   def remove_favourite_pet(conn, %{"pet_id" => pet_id} = _params) do

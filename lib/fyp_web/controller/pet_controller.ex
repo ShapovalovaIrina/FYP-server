@@ -13,7 +13,7 @@ defmodule FypWeb.PetController do
   security [%{}]
 
   operation :pet_list,
-    summary: "Get all pets from server.",
+    summary: "Get all pets",
     responses: %{
       200 => {"Pet list", "application/json", Pets}
     }
@@ -24,7 +24,7 @@ defmodule FypWeb.PetController do
   end
 
   operation :pet,
-    summary: "Get pet info by ID.",
+    summary: "Get pet by ID",
     parameters: [
       id: [
         in: :path,

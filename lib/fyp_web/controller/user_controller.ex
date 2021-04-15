@@ -6,17 +6,19 @@ defmodule FypWeb.UserController do
   use OpenApiSpex.ControllerSpecs
   import FypWeb.ControllerUtils
   alias Fyp.Users
-  alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus}
+  alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus, Unauthenticated, AccessForbidden}
   alias OpenApi.UsersSchema.User
 
   tags ["Users"]
   security [%{"authorization" => []}]
 
   operation :create_user,
-    summary: "Create user with params from auth token.",
+    summary: "Create user with params from auth token",
     responses: %{
       201 => {"Success", "application/json", SuccessfulStatus},
-      400 => {"Bad status", "application/json", BadStatus}
+      400 => {"Bad status", "application/json", BadStatus},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden}
     }
 
   def create_user(conn, _params) do
@@ -28,9 +30,11 @@ defmodule FypWeb.UserController do
   end
 
   operation :show_user,
-    summary: "Get user info. ID is getting from auth token.",
+    summary: "Get user info. ID is getting from auth token",
     responses: %{
       200 => {"User response", "application/json", User},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden},
       404 => {"Not found", "application/json", NotFoundStatus}
     }
 
@@ -43,11 +47,13 @@ defmodule FypWeb.UserController do
   end
 
   operation :delete_user,
-    summary: "Delete user. ID is getting from auth token.",
+    summary: "Delete user. ID is getting from auth token",
     responses: %{
       200 => {"Success", "application/json", SuccessfulStatus},
-      404 => {"Not found", "application/json", NotFoundStatus},
-      400 => {"Bad status", "application/json", BadStatus}
+      400 => {"Bad status", "application/json", BadStatus},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden},
+      404 => {"Not found", "application/json", NotFoundStatus}
     }
 
   def delete_user(conn, _params) do
