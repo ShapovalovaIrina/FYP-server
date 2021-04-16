@@ -67,8 +67,8 @@ jobs:
 
       - name: Export env
         run: |
-          export MIX_ENV=prod
           export SECRET_KEY_BASE=$(mix phx.gen.secret)
+          export MIX_ENV=prod
 
       - name: Release
         run: |
