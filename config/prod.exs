@@ -16,6 +16,9 @@ config :fyp, FypWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :fyp,
+  key_source: {:system, :atom, "KEY_SOURCE", :env}
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
