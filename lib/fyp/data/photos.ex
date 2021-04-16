@@ -21,8 +21,8 @@ defmodule Fyp.Photos do
     changeset = Photos.changeset(%Photos{}, photo_params)
     case Fyp.Repo.insert(changeset, opts) do
       {:ok, _struct} ->
-        Logger.info("Insert pet photo")
         :ok
+
       {:error, reason} ->
         Logger.error("Insertion failed. Reason: #{inspect(reason)}")
         :error

@@ -28,6 +28,9 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/joken_jwks" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/open_api_spex" />
       <excludeFolder url="file://$MODULE_DIR$/_build/test/lib/open_api_spex" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/quantum" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/crontab" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/gen_stage" />
     </content>
     <orderEntry type="jdk" jdkName="Python 2.7" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -91,5 +94,9 @@
     <orderEntry type="library" name="mix_test_watch" level="project" />
     <orderEntry type="library" name="confex" level="project" />
     <orderEntry type="library" name="open_api_spex" level="project" />
+    <orderEntry type="library" name="quantum" level="project" />
+    <orderEntry type="library" name="crontab" level="project" />
+    <orderEntry type="library" name="gen_stage" level="project" />
+    <orderEntry type="library" name="tzdata" level="project" />
   </component>
 </module>
