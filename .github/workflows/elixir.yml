@@ -69,6 +69,7 @@ jobs:
         run: |
           export SECRET_KEY_BASE=$(mix phx.gen.secret)
           export MIX_ENV=prod
+          echo $MIX_ENV
           mix release
 
       - name: Upload release
