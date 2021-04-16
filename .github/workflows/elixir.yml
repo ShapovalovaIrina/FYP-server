@@ -73,6 +73,7 @@ jobs:
           export MIX_ENV=prod
           export SECRET_KEY_BASE=$(mix phx.gen.secret)
           export VERSION=$(cat mix.exs | grep version | sed -e 's/.*version: .\\([0-9\\.]\\+\\).,/\\1/')
+          mix phx.digest
           mix release
 
       - name: Build image

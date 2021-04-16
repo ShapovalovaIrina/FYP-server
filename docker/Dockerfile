@@ -1,6 +1,6 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
-ADD _build/prod /opt/_build/prod
+COPY _build/prod /opt/_build/prod
 RUN apt-get update && \
     apt-get install libssl1.1
 RUN ln -s /opt/_build/prod/rel/fyp/bin/fyp /usr/sbin/fyp-server
