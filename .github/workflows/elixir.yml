@@ -65,14 +65,11 @@ jobs:
           mix local.hex --force
           mix deps.get
 
-      - name: Export env
+      - name: Release
         run: |
           export SECRET_KEY_BASE=$(mix phx.gen.secret)
           export MIX_ENV=prod
-
-      - name: Release
-        run: |
-          mix phx.digest
+          echo $MIX_ENV
           mix release
 
       - name: Upload release
