@@ -15,7 +15,16 @@ defmodule Fyp.Pets do
       conflict_target: {:unsafe_fragment, "(name, shelter_id)"}
     ]
 
-    {photos, pet_params} = Map.split(pet_with_photos, ["photos"])
+    {photos, pet_params} =
+      case Map.has_key?(pet_with_photos, "photos") do
+        true ->
+          Map.split(pet_with_photos, ["photos"])
+
+        false ->
+          {photo, pets} = Map.split(pet_with_photos, [:photos])
+          photo = Map.new(photo, fn {k, v} -> {Atom.to_string(k), v} end)
+          {photo, pets}
+      end
 
     changeset = Pets.changeset(%Pets{}, pet_params)
 

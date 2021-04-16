@@ -18,8 +18,8 @@ defmodule Fyp.Application do
       FypWeb.Endpoint,
       # Start a worker by calling: Fyp.Worker.start_link(arg)
       # {Fyp.Worker, arg}
-      # TODO deprecated
-      worker(Task, [&Fyp.Migrator.migrate/0], restart: :transient)
+      worker(Task, [&Fyp.Migrator.migrate/0], restart: :transient),
+      Fyp.Scraping.DataAggregation
     ]
 
     additional_children =

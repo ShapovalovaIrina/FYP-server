@@ -1,12 +1,10 @@
-defmodule Fyp.WebScraping do
-  @moduledoc """
-  Scrape pets data from web cites using HTTPoison and Floki
-  """
+defimpl Fyp.Scraping.Shelters, for: ShelterFriend do
   require Logger
 
-  def get_pets() do
-    pets =
-      get_pets_url
+  def get_pets(%ShelterFriend{link: url}) do
+    # TODO handle errors from get pets url
+    _pets =
+      get_pets_url(url)
       |> get_pets_html_body
       |> Enum.map(fn body ->
         %{
@@ -19,9 +17,10 @@ defmodule Fyp.WebScraping do
           photos: get_pet_photos(body),
         }
       end)
+      |> Enum.each(fn pet -> Fyp.Pets.create(pet) end)
   end
 
-  def get_pets_url(url \\ "http://priyut-drug.ru/take/") do
+  def get_pets_url(url) do
     Logger.warn("Getting data from #{url}")
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
@@ -34,20 +33,21 @@ defmodule Fyp.WebScraping do
           |> Floki.find("a:fl-contains('')")
           |> Floki.attribute("href")
 
-        have_next =
-          body
-          |> Floki.parse_document!()
-          |> Floki.find("li[class=arrow]")
-          |> Floki.find("a")
-          |> Floki.attribute("href")
-        case have_next do
-          [] -> urls
-          [next_page] -> urls ++ get_pets_url(url <> next_page)
-        end
-      {:ok, %HTTPoison.Response{status_code: 404}} ->
+        urls
+#        have_next =
+#          body
+#          |> Floki.parse_document!()
+#          |> Floki.find("li[class=arrow]")
+#          |> Floki.find("a")
+#          |> Floki.attribute("href")
+#        case have_next do
+#          [] -> urls
+#          [next_page] -> urls ++ get_pets_url(url <> next_page)
+#        end
+      {:error, %HTTPoison.Response{status_code: 404}} ->
         Logger.warn("Page is not found. Url: #{url}")
         []
-      {:ok, %HTTPoison.Error{reason: reason}} ->
+      {:error, %HTTPoison.Error{reason: reason}} ->
         Logger.warn("Page error. Url: #{url}. Reason: #{inspect(reason)}")
     end
   end
