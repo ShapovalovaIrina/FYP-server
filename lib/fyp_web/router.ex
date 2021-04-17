@@ -38,6 +38,7 @@ defmodule FypWeb.Router do
     delete "/", UserController, :delete_user
 
     post "/favourite/:pet_id", FavouriteController, :add_favourite_pet
+    get "/favourite", FavouriteController, :get_favourite_pet
     delete "/favourite/:pet_id", FavouriteController, :remove_favourite_pet
   end
 

@@ -31,7 +31,7 @@ defmodule Fyp.Pets do
     case Repo.insert(changeset, opts) do
       {:ok, %Pets{id: uuid}} ->
         Logger.info("Insert pet with uuid: #{uuid}.")
-        res = Fyp.Photos.create_all(photos, uuid)
+        res = Photos.create_all(photos, uuid)
         {res, uuid}
 
       {:error, reason} ->
@@ -46,13 +46,23 @@ defmodule Fyp.Pets do
         preload: [:photos, :shelter]
 
     Repo.all(query)
-    |> Enum.map(fn struct -> map_from_pet_struct(struct) end)
+    |> Enum.map(fn pet ->
+      Map.update(pet, :photos, [], fn photos -> Photos.struct_list_to_map_list(photos) end)
+    end)
   end
 
   def pet_by_id(id) do
     case Repo.get(Pets, id) |> Repo.preload([:photos, :shelter]) do
-      nil -> {:error, :not_found}
-      struct -> {:ok, map_from_pet_struct(struct)}
+      nil ->
+        {:error, :not_found}
+
+      struct ->
+        struct =
+          Map.update(struct, :photos, [], fn photos ->
+            Photos.struct_list_to_map_list(photos)
+          end)
+
+        {:ok, struct}
     end
   end
 
@@ -69,12 +79,8 @@ defmodule Fyp.Pets do
              :photos,
              :shelter
            ]),
-         {_, map_with_photos} <-
-           Map.get_and_update(map, :photos, fn current_value ->
-             {current_value, Photos.struct_list_to_map_list(current_value)}
-           end),
          {_, ready_map} <-
-           Map.get_and_update(map_with_photos, :shelter, fn current_value ->
+           Map.get_and_update(map, :shelter, fn current_value ->
              {current_value, struct_shelter_to_map_shelter(current_value)}
            end) do
       ready_map
