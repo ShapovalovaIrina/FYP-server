@@ -60,8 +60,20 @@ defmodule Fyp.Favourites do
 
   def get_assoc_pets(user_id) do
     case Repo.get(Users, user_id) do
-      nil -> {:error, :not_found}
-      user -> {:ok, Repo.preload(user, :pets).pets}
+      nil ->
+        {:error, :not_found}
+
+      user ->
+        pets =
+          Repo.preload(user, :pets).pets
+          |> Repo.preload([:photos, :shelter])
+          |> Enum.map(fn pet ->
+            Map.update(pet, :photos, [], fn photos ->
+              Fyp.Photos.struct_list_to_map_list(photos)
+            end)
+          end)
+
+        {:ok, pets}
     end
   end
 

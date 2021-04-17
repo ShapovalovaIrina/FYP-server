@@ -13,6 +13,7 @@ defmodule Schemas.Shelter do
   Has many pets (One to Many relationship with pets).
   """
 
+  @derive {Jason.Encoder, only: [:title, :vk_link, :site_link]}
   @primary_key {:id, :id, autogenerate: false}
   schema "shelter" do
     field :title, :string

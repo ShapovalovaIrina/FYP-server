@@ -32,7 +32,9 @@ defmodule PetsTest do
   test "Get pet list data" do
     str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
     {:ok, id} = Pets.create(str_data)
-    first_pet = Pets.pet_list()
+    first_pet =
+      Pets.pet_list()
+      |> Enum.map(fn struct -> Pets.map_from_pet_struct(struct) end)
     expected_pet =
       @data
       |> Map.merge(%{id: id, shelter: @shelter_data})
@@ -44,6 +46,7 @@ defmodule PetsTest do
     str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
     {:ok, pet_id} = Pets.create(str_data)
     {:ok, pet_data} = Pets.pet_by_id(pet_id)
+    pet_data = Pets.map_from_pet_struct(pet_data)
     expected_pet =
       @data
       |> Map.merge(%{id: pet_id, shelter: @shelter_data})

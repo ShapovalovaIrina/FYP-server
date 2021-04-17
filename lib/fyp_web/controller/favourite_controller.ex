@@ -8,6 +8,7 @@ defmodule FypWeb.FavouriteController do
   import FypWeb.ControllerUtils
   alias Fyp.Favourites
   alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus, Unauthenticated, AccessForbidden}
+  alias OpenApi.PetSchemas.Pets
 
   require Logger
 
@@ -45,6 +46,23 @@ defmodule FypWeb.FavouriteController do
       {:error, reason} ->
         Logger.error("Error in favourite controller was caused by: #{inspect(reason)}")
         conn |> put_status(400) |> json(bad_status())
+    end
+  end
+
+  operation :get_favourite_pet,
+    summary: "Get favourite pets of authorized user",
+    responses: %{
+      200 => {"Pet list", "application/json", Pets},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden},
+      404 => {"Not found", "application/json", NotFoundStatus}
+    }
+
+  def get_favourite_pet(conn, _params) do
+    %{"user_id" => user_id} = conn.assigns.authentication.claims
+    case Favourites.get_assoc_pets(user_id) do
+      {:error, :not_found} -> conn |> put_status(404) |> json(not_found_status())
+      {:ok, pets} -> conn |> put_status(200) |> json(pets)
     end
   end
 

@@ -18,6 +18,11 @@ defmodule Schemas.Pets do
   Belongs to shelter (Many to one relationship with shelters).
   """
 
+  @derive {Jason.Encoder, only: [
+    :name, :breed, :gender,
+    :birth, :height, :description,
+    :photos, :shelter, :id
+  ]}
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "pets" do
     field :name, :string
