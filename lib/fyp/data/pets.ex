@@ -31,7 +31,7 @@ defmodule Fyp.Pets do
     case Repo.insert(changeset, opts) do
       {:ok, %Pets{id: uuid}} ->
         Logger.info("Insert pet with uuid: #{uuid}.")
-        res = Fyp.Photos.create_all(photos, uuid)
+        res = Photos.create_all(photos, uuid)
         {res, uuid}
 
       {:error, reason} ->
@@ -47,7 +47,7 @@ defmodule Fyp.Pets do
 
     Repo.all(query)
     |> Enum.map(fn pet ->
-      Map.update(pet, :photos, [], fn photos -> Fyp.Photos.struct_list_to_map_list(photos) end)
+      Map.update(pet, :photos, [], fn photos -> Photos.struct_list_to_map_list(photos) end)
     end)
   end
 
@@ -59,7 +59,7 @@ defmodule Fyp.Pets do
       struct ->
         struct =
           Map.update(struct, :photos, [], fn photos ->
-            Fyp.Photos.struct_list_to_map_list(photos)
+            Photos.struct_list_to_map_list(photos)
           end)
 
         {:ok, struct}
