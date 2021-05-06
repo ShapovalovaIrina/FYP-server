@@ -61,6 +61,23 @@ defmodule FavouriteDataTest do
     assert @user_data == Users.map_from_struct(hd(liked_by_users))
   end
 
+  test "Add pet to favourite and get ids" do
+    str_data = Map.new(@pet_data, fn {k, v} -> {Atom.to_string(k), v} end)
+    {:ok, pet_id} = Pets.create(str_data)
+    {:ok, user_id} = Users.create(@user_data)
+
+    {:ok, _new_user} = Favourites.add_favourite_for_user(user_id, pet_id)
+
+    {:ok, favourite_pets_ids} = Favourites.get_assoc_pets_ids(user_id)
+    {:ok, liked_by_users} = Favourites.get_assoc_users(pet_id)
+
+    assert length(favourite_pets_ids) == 1
+    assert length(liked_by_users) == 1
+
+    assert hd(favourite_pets_ids) == pet_id
+    assert @user_data == Users.map_from_struct(hd(liked_by_users))
+  end
+
   test "Add favourite to non-existent user" do
     str_data = Map.new(@pet_data, fn {k, v} -> {Atom.to_string(k), v} end)
     {:ok, pet_id} = Pets.create(str_data)
