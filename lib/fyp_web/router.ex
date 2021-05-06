@@ -39,6 +39,7 @@ defmodule FypWeb.Router do
 
     post "/favourite/:pet_id", FavouriteController, :add_favourite_pet
     get "/favourite", FavouriteController, :get_favourite_pet
+    get "/favourite/id", FavouriteController, :get_favourite_pet_ids
     delete "/favourite/:pet_id", FavouriteController, :remove_favourite_pet
   end
 

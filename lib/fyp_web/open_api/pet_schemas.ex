@@ -51,4 +51,14 @@ defmodule OpenApi.PetSchemas do
       items: Pet
     })
   end
+
+  defmodule PetsIds do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "Pet list (id only)",
+      type: :array,
+      items: %Schema{type: :string, description: "Pet id", example: "123e4567-e89b-12d3-a456-426655440000"}
+    })
+  end
 end

@@ -85,6 +85,29 @@ defmodule FavouriteControllerTest do
     end
   end
 
+  test "Get favourites (id only)", %{conn: conn} do
+    {:ok, pet_id} = Pets.create(@pet_data)
+    user_id = Map.get(@user_data, "id")
+
+    authorized(conn, "user@mail.com") do
+      c = post(conn, "/users")
+      assert json_response(c, 201) == successful_status()
+
+      {:ok, favourite_pets_ids} = Favourites.get_assoc_pets_ids(user_id)
+      {:ok, liked_by_users} = Favourites.get_assoc_users(pet_id)
+      assert length(favourite_pets_ids) == 0
+      assert length(liked_by_users) == 0
+
+      c = post(conn, "/users/favourite/#{pet_id}")
+      assert json_response(c, 200) == successful_status()
+
+      c = get(conn, "/users/favourite/id")
+      favourite_pets_ids = json_response(c, 200)
+      assert length(favourite_pets_ids) == 1
+      assert [pet_id] == favourite_pets_ids
+    end
+  end
+
   test "Delete favourite pet from user", %{conn: conn} do
     {:ok, pet_id} = Pets.create(@pet_data)
     user_id = Map.get(@user_data, "id")
