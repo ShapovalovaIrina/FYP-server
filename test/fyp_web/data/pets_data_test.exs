@@ -3,6 +3,8 @@ defmodule PetsTest do
   use Fyp.DataCase, async: false
 
   alias Fyp.Pets
+  alias Fyp.Favourites
+  alias Fyp.Users
 
   @data %{
     name: "Демьян",
@@ -24,14 +26,18 @@ defmodule PetsTest do
     site_link: ""
   }
 
+  @user_data %{
+    id: "ty6kse",
+    name: "Username",
+    email: "user@mail.com"
+  }
+
   test "Pet data (with photos) insertion" do
-    str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
-    {:ok, _id} = Pets.create(str_data)
+    {:ok, _id} = Pets.create(@data)
   end
 
   test "Get pet list data" do
-    str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
-    {:ok, id} = Pets.create(str_data)
+    {:ok, id} = Pets.create(@data)
     first_pet =
       Pets.pet_list()
       |> Enum.map(fn struct -> Pets.map_from_pet_struct(struct) end)
@@ -43,8 +49,7 @@ defmodule PetsTest do
   end
 
   test "Get pet by id" do
-    str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
-    {:ok, pet_id} = Pets.create(str_data)
+    {:ok, pet_id} = Pets.create(@data)
     {:ok, pet_data} = Pets.pet_by_id(pet_id)
     pet_data = Pets.map_from_pet_struct(pet_data)
     expected_pet =
@@ -55,11 +60,38 @@ defmodule PetsTest do
   end
 
   test "Duplicate pet" do
-    str_data = Map.new(@data, fn {k, v} -> {Atom.to_string(k), v} end)
-    {:ok, pet_id_1} = Pets.create(str_data)
-    {:ok, pet_id_2} = Pets.create(str_data)
+    {:ok, pet_id_1} = Pets.create(@data)
+    {:ok, pet_id_2} = Pets.create(@data)
     list = Pets.pet_list()
     assert pet_id_1 == pet_id_2
     assert 1 == length(list)
+  end
+
+  test "Update favorite pet (make sure favourite relation not deleted on pet update)" do
+    {:ok, pet_id_1} = Pets.create(@data)
+    {:ok, user_id} = Users.create(@user_data)
+
+    {:ok, _new_user} = Favourites.add_favourite_for_user(user_id, pet_id_1)
+
+    {:ok, favourite_pets} = Favourites.get_assoc_pets(user_id)
+    {:ok, liked_by_users} = Favourites.get_assoc_users(pet_id_1)
+    assert length(favourite_pets) == 1
+    assert length(liked_by_users) == 1
+
+    {:ok, pet_id_2} = Pets.create(@data)
+    assert pet_id_1 == pet_id_2
+
+    {:ok, favourite_pets} = Favourites.get_assoc_pets(user_id)
+    {:ok, liked_by_users} = Favourites.get_assoc_users(pet_id_2)
+    assert length(favourite_pets) == 1
+    assert length(liked_by_users) == 1
+  end
+
+  test "Delete pet" do
+    {:ok, pet_id} = Pets.create(@data)
+    {:ok, _pet_data} = Pets.pet_by_id(pet_id)
+
+    :ok = Pets.delete_pet(pet_id)
+    {:error, :not_found} = Pets.pet_by_id(pet_id)
   end
 end

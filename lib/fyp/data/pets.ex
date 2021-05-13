@@ -66,6 +66,29 @@ defmodule Fyp.Pets do
     end
   end
 
+  defp pet_by_id_without_preload(id) do
+    case Repo.get(Pets, id) do
+      nil -> {:error, :not_found}
+      struct -> {:ok, struct}
+    end
+  end
+
+  def delete_pet(id) do
+    with {:ok, pet} <- pet_by_id_without_preload(id),
+         {:ok, _} <- Repo.delete(pet) do
+      :ok
+    else
+      {:error, :not_found} ->
+        :not_found
+
+      {:error, changeset} ->
+        Logger.error(
+          "Error in pet deletion. Pet id: #{id}. Changeset: #{inspect(changeset)}"
+        )
+        :error
+    end
+  end
+
   def map_from_pet_struct(struct) do
     with map <-
            Map.take(struct, [
