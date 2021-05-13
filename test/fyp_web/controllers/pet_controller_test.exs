@@ -3,6 +3,9 @@ defmodule PetControllerTest do
   use FypWeb.ConnCase, async: false
   use Plug.Test
 
+  import Utils.TestUtils
+  import FypWeb.ControllerUtils
+
   alias Fyp.Pets
 
   @data %{
@@ -45,5 +48,22 @@ defmodule PetControllerTest do
       |> Map.merge(%{"id" => id, "shelter" => @shelter_data})
       |> Map.delete("shelter_id")
     assert json_response(c, 200) == expected_pet
+  end
+
+  test "Delete pet", %{conn: conn} do
+    {:ok, id} = Pets.create(@data)
+    c = get(conn, "/pets/#{id}")
+    expected_pet =
+      @data
+      |> Map.merge(%{"id" => id, "shelter" => @shelter_data})
+      |> Map.delete("shelter_id")
+    assert json_response(c, 200) == expected_pet
+
+    authorized(conn, "user@mail.com") do
+      c = delete(conn, "/pets/#{id}")
+    end
+
+    c = get(conn, "/pets/#{id}")
+    assert json_response(c, 404) == not_found_status()
   end
 end

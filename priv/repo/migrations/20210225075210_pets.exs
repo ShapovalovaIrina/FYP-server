@@ -25,7 +25,7 @@ defmodule Fyp.Repo.Migrations.Pets do
 
     create table(:photos, primary_key: false) do
       add :photo_url, :string, primary_key: true
-      add :pets_id, references(:pets, column: :id, type: :uuid)
+      add :pets_id, references(:pets, column: :id, type: :uuid, on_delete: :delete_all)
     end
   end
 end

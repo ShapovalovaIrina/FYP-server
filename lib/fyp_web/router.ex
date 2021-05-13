@@ -15,6 +15,12 @@ defmodule FypWeb.Router do
     plug AuthorizationPlug
   end
 
+  pipeline :admin_auth do
+    plug :accepts, ["json"]
+    plug AuthorizationPlug
+#    plug AdminAuthorizationPlug
+  end
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -30,6 +36,13 @@ defmodule FypWeb.Router do
     get "/:id", PetController, :pet
   end
 
+  scope "/pets", FypWeb do
+    pipe_through :admin_auth
+
+    post "/", PetController, :add_pet
+    delete "/:id", PetController, :remove_pet
+  end
+
   scope "/users", FypWeb do
     pipe_through :auth
 
@@ -39,7 +52,6 @@ defmodule FypWeb.Router do
 
     post "/favourite/:pet_id", FavouriteController, :add_favourite_pet
     get "/favourite", FavouriteController, :get_favourite_pet
-    get "/favourite/id", FavouriteController, :get_favourite_pet_ids
     delete "/favourite/:pet_id", FavouriteController, :remove_favourite_pet
   end
 
