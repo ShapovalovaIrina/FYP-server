@@ -7,7 +7,7 @@ defmodule FypWeb.PetController do
   use OpenApiSpex.ControllerSpecs
   import FypWeb.ControllerUtils
   alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus, Unauthenticated, AccessForbidden}
-  alias OpenApi.PetSchemas.{Pet, Pets}
+  alias OpenApi.PetSchemas.{Pet, PetParameters, Pets}
 
   tags ["Pets"]
   security [%{}]
@@ -46,9 +46,35 @@ defmodule FypWeb.PetController do
     end
   end
 
+  operation :add_pet,
+    summary: "Create pet with provided parameters. Only for users with admin access rights",
+    request_body: {"Pet parameters", "application/json", PetParameters},
+    responses: %{
+      201 => {"Success", "application/json", SuccessfulStatus},
+      400 => {"Bad status", "application/json", BadStatus},
+      401 => {"Unauthenticated", "application/json", Unauthenticated},
+      403 => {"Access forbidden", "application/json", AccessForbidden}
+    }
+
+
   def add_pet(conn, params) do
-    IO.inspect(params, label: "Params")
-    conn
+    res = case validate_input_pet_params(params) do
+      true -> Fyp.Pets.create(params)
+      false -> :incorrect_body
+    end
+
+    case res do
+      :error -> conn |> put_status(400) |> json(bad_status())
+      :incorrect_body -> conn |> put_status(400) |> json(bad_status())
+      {_, uuid} -> conn |> put_status(201) |> json(successful_status())
+    end
+  end
+
+  defp validate_input_pet_params(params) do
+    Map.has_key?(params, "name") and
+    Map.has_key?(params, "shelter_id") and
+    Map.has_key?(params, "description") and
+    is_list(Map.get(params, "photos"))
   end
 
   operation :remove_pet,

@@ -8,7 +8,7 @@ defmodule PetControllerTest do
 
   alias Fyp.Pets
 
-  @data %{
+  @pet_data %{
     "name" => "Демьян",
     "breed" => "метис",
     "gender" => "мальчик",
@@ -31,30 +31,59 @@ defmodule PetControllerTest do
   }
 
   test "Get pet list", %{conn: conn} do
-    {:ok, id} = Pets.create(@data)
+    {:ok, id} = Pets.create(@pet_data)
     c = get(conn, "/pets")
     expected_pet =
-      @data
+      @pet_data
       |> Map.merge(%{"id" => id, "shelter" => @shelter_data})
       |> Map.delete("shelter_id")
     assert json_response(c, 200) == [expected_pet]
   end
 
   test "Get pet by id", %{conn: conn} do
-    {:ok, id} = Pets.create(@data)
+    {:ok, id} = Pets.create(@pet_data)
     c = get(conn, "/pets/#{id}")
     expected_pet =
-      @data
+      @pet_data
       |> Map.merge(%{"id" => id, "shelter" => @shelter_data})
       |> Map.delete("shelter_id")
     assert json_response(c, 200) == expected_pet
   end
 
+  test "Create pet", %{conn: conn} do
+    c = get(conn, "/pets")
+    assert length(json_response(c, 200)) == 0
+
+    authorized(conn, "user@mail.com") do
+      c = post(conn, "/pets", @pet_data)
+      assert json_response(c, 201) == successful_status()
+    end
+
+    c = get(conn, "/pets")
+    assert length(json_response(c, 200)) == 1
+  end
+
+  test "Create pet with incorrect parameters", %{conn: conn} do
+    c = get(conn, "/pets")
+    assert length(json_response(c, 200)) == 0
+
+    authorized(conn, "user@mail.com") do
+      data =
+        @pet_data
+        |> Map.delete("shelter_id")
+      c = post(conn, "/pets", data)
+      assert json_response(c, 400) == bad_status()
+    end
+
+    c = get(conn, "/pets")
+    assert length(json_response(c, 200)) == 0
+  end
+
   test "Delete pet", %{conn: conn} do
-    {:ok, id} = Pets.create(@data)
+    {:ok, id} = Pets.create(@pet_data)
     c = get(conn, "/pets/#{id}")
     expected_pet =
-      @data
+      @pet_data
       |> Map.merge(%{"id" => id, "shelter" => @shelter_data})
       |> Map.delete("shelter_id")
     assert json_response(c, 200) == expected_pet

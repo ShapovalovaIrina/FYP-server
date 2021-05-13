@@ -8,7 +8,7 @@ defmodule FypWeb.FavouriteController do
   import FypWeb.ControllerUtils
   alias Fyp.Favourites
   alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus, Unauthenticated, AccessForbidden}
-  alias OpenApi.PetSchemas.{Pets, PetsIds}
+  alias OpenApi.PetSchemas.Pets
 
   require Logger
 
