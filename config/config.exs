@@ -15,7 +15,7 @@ config :fyp, FypWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "UeV60hy/Hyp3mG/Juw+jZKRkDHP8ZTUvSc2Qoeu9OqOEgJ6v+6NCBtuwv+7rBMgI",
   render_errors: [view: FypWeb.ErrorView, accepts: ~w(json), layout: false],
-  pubsub_server: Fyp.PubSub,
+  # pubsub_server: Fyp.PubSub,
   live_view: [signing_salt: "aKcxVzDV"]
 
 # Configures Elixir's Logger
