@@ -5,7 +5,7 @@ defmodule AdminAuthorizationPlug do
     options
   end
 
-  def call(conn, options) do
+  def call(conn, _options) do
     case conn.assigns[:authentication][:claims]["firebase_group"] do
       :user -> forbidden_access(conn)
       :admin -> conn

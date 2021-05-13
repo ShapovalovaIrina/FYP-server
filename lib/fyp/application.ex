@@ -10,10 +10,8 @@ defmodule Fyp.Application do
     children = [
       # Start the Ecto repository
       Fyp.Repo,
-      # Start the Telemetry supervisor
-      FypWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: Fyp.PubSub},
+      # # Start the PubSub system
+      # {Phoenix.PubSub, name: Fyp.PubSub},
       # Start the Endpoint (http/https)
       FypWeb.Endpoint,
       # Start a worker by calling: Fyp.Worker.start_link(arg)

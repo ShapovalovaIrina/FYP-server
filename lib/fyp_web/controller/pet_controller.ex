@@ -66,7 +66,7 @@ defmodule FypWeb.PetController do
     case res do
       :error -> conn |> put_status(400) |> json(bad_status())
       :incorrect_body -> conn |> put_status(400) |> json(bad_status())
-      {_, uuid} -> conn |> put_status(201) |> json(successful_status())
+      {_, _uuid} -> conn |> put_status(201) |> json(successful_status())
     end
   end
 
