@@ -10,6 +10,12 @@ defmodule Fyp.Repo.Migrations.Pets do
 
     create unique_index(:shelter, :title)
 
+    create table(:pet_type) do
+      add :type, :string, null: false
+    end
+
+    create unique_index(:pet_type, :type)
+
     create table(:pets, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :name, :string, null: false
@@ -19,9 +25,10 @@ defmodule Fyp.Repo.Migrations.Pets do
       add :height, :string
       add :description, :text
       add :shelter_id, references(:shelter, column: :id, type: :id)
+      add :pet_type_id, references(:pet_type, column: :id, type: :id)
     end
 
-    create unique_index(:pets, [:name, :shelter_id])
+    create unique_index(:pets, [:name, :shelter_id, :pet_type_id])
 
     create table(:photos, primary_key: false) do
       add :photo_url, :string, primary_key: true

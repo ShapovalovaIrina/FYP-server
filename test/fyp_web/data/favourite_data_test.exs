@@ -18,7 +18,8 @@ defmodule FavouriteDataTest do
       "/media/photologue/photos/mQDrbrDU_z0.jpg",
       "/media/photologue/photos/xoOK2tMRMOU.jpg"
     ],
-    shelter_id: 1
+    shelter_id: 1,
+    pet_type_id: 2
   }
 
   @shelter_data %{
