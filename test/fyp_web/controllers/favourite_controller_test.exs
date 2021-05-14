@@ -20,7 +20,8 @@ defmodule FavouriteControllerTest do
       "/media/photologue/photos/VTzN9xCbeWg.jpg",
       "/media/photologue/photos/mQDrbrDU_z0.jpg",
       "/media/photologue/photos/xoOK2tMRMOU.jpg"],
-    "shelter_id" => 1
+    "shelter_id" => 1,
+    "type_id" => 2
   }
 
   @user_data %{
@@ -33,6 +34,10 @@ defmodule FavouriteControllerTest do
     "title" => "Shelter Friend",
     "vk_link" => "",
     "site_link" => ""
+  }
+
+  @type_data %{
+    "type" => "Собака"
   }
 
   test "Add favourite pet to user", %{conn: conn} do
@@ -78,8 +83,8 @@ defmodule FavouriteControllerTest do
       favourite_pets = json_response(c, 200)
       expected_pet =
         @pet_data
-        |> Map.merge(%{"shelter" => @shelter_data, "id" => pet_id})
-        |> Map.delete("shelter_id")
+        |> Map.merge(%{"id" => pet_id, "shelter" => @shelter_data, "type" => @type_data})
+        |> Map.drop(["shelter_id", "type_id"])
       assert length(favourite_pets) == 1
       assert [expected_pet] == favourite_pets
     end

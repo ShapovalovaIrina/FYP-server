@@ -66,7 +66,7 @@ defmodule Fyp.Favourites do
       user ->
         pets =
           Repo.preload(user, :pets).pets
-          |> Repo.preload([:photos, :shelter])
+          |> Repo.preload([:photos, :shelter, :type])
           |> Enum.map(fn pet ->
             Map.update(pet, :photos, [], fn photos ->
               Fyp.Photos.struct_list_to_map_list(photos)

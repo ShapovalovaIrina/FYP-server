@@ -18,13 +18,18 @@ defmodule FavouriteDataTest do
       "/media/photologue/photos/mQDrbrDU_z0.jpg",
       "/media/photologue/photos/xoOK2tMRMOU.jpg"
     ],
-    shelter_id: 1
+    shelter_id: 1,
+    type_id: 2
   }
 
   @shelter_data %{
     title: "Shelter Friend",
     vk_link: "",
     site_link: ""
+  }
+
+  @type_data %{
+    type: "Собака"
   }
 
   @user_data %{
@@ -49,12 +54,13 @@ defmodule FavouriteDataTest do
       hd(favourite_pets)
       |> Fyp.Repo.preload(:photos)
       |> Fyp.Repo.preload(:shelter)
+      |> Fyp.Repo.preload(:type)
       |> Pets.map_from_pet_struct()
 
     expected_pet =
       @pet_data
-      |> Map.merge(%{id: pet_id, shelter: @shelter_data})
-      |> Map.delete(:shelter_id)
+      |> Map.merge(%{id: pet_id, shelter: @shelter_data, type: @type_data})
+      |> Map.drop([:shelter_id, :type_id])
 
     assert expected_pet == pet
     assert @user_data == Users.map_from_struct(hd(liked_by_users))

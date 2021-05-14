@@ -4,7 +4,7 @@ defmodule Fyp.Pets do
   """
 
   import Ecto.Query
-  alias Schemas.{Pets, Shelter}
+  alias Schemas.{Pets, Shelter, Type}
   alias Fyp.{Repo, Photos}
   require Logger
 
@@ -12,7 +12,7 @@ defmodule Fyp.Pets do
     opts = [
       returning: [:id],
       on_conflict: {:replace_all_except, [:id]},
-      conflict_target: {:unsafe_fragment, "(name, shelter_id)"}
+      conflict_target: {:unsafe_fragment, "(name, shelter_id, type_id)"}
     ]
 
     {photos, pet_params} =
@@ -43,7 +43,7 @@ defmodule Fyp.Pets do
   def pet_list() do
     query =
       from pet in Pets,
-        preload: [:photos, :shelter]
+        preload: [:photos, :shelter, :type]
 
     Repo.all(query)
     |> Enum.map(fn pet ->
@@ -52,7 +52,7 @@ defmodule Fyp.Pets do
   end
 
   def pet_by_id(id) do
-    case Repo.get(Pets, id) |> Repo.preload([:photos, :shelter]) do
+    case Repo.get(Pets, id) |> Repo.preload([:photos, :shelter, :type]) do
       nil ->
         {:error, :not_found}
 
@@ -100,12 +100,17 @@ defmodule Fyp.Pets do
              :height,
              :description,
              :photos,
-             :shelter
+             :shelter,
+             :type
            ]),
-         {_, ready_map} <-
+         {_, map_with_shelter} <-
            Map.get_and_update(map, :shelter, fn current_value ->
              {current_value, struct_shelter_to_map_shelter(current_value)}
-           end) do
+           end),
+        {_, ready_map} <-
+          Map.get_and_update(map_with_shelter, :type, fn current_value ->
+            {current_value, struct_type_to_map_type(current_value)}
+          end) do
       ready_map
     else
       error ->
@@ -123,6 +128,16 @@ defmodule Fyp.Pets do
   end
 
   defp struct_shelter_to_map_shelter(_incorrect_input) do
+    %{}
+  end
+
+  defp struct_type_to_map_type(%Type{} = type_struct) do
+    Map.take(type_struct, [
+      :type
+    ])
+  end
+
+  defp struct_type_to_map_type(_incorrect_input) do
     %{}
   end
 end
