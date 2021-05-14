@@ -5,7 +5,7 @@ config :fyp, Fyp.Repo,
   username: {:system, "REPO_USERNAME", "postgres"},
   password: {:system, "REPO_PASSWORD", "postgres"},
   database: {:system, "REPO_DATABASE", "fyp"},
-  hostname: {:system, "REPO_HOSTNAME", "localhost"},
+  hostname: {:system, "REPO_HOSTNAME", "pghost"},
   port: {:system, :integer, "REPO_PORT", 5432},
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

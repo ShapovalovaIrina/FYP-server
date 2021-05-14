@@ -12,7 +12,7 @@ defmodule Fyp.Pets do
     opts = [
       returning: [:id],
       on_conflict: {:replace_all_except, [:id]},
-      conflict_target: {:unsafe_fragment, "(name, shelter_id)"}
+      conflict_target: {:unsafe_fragment, "(name, shelter_id, pet_type_id)"}
     ]
 
     {photos, pet_params} =

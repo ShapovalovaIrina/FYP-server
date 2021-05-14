@@ -1,4 +1,4 @@
-defmodule PetType do
+defmodule Schemas.PetType do
   use Ecto.Schema
   import Ecto.Changeset
 

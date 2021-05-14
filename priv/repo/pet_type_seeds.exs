@@ -13,26 +13,29 @@
 require Logger
 
 pet_type_data = [
-    %Schemas.PetType{
-      id: 1,
-      title: "Котик"
-    },
-    %Schemas.PetType{
-      id: 2,
-      title: "Собака"
-    }
-  ]
+  %Schemas.PetType{
+    id: 1,
+    type: "Котик"
+  },
+  %Schemas.PetType{
+    id: 2,
+    type: "Собака"
+  }
+]
 
 opts = [
   on_conflict: :replace_all,
   conflict_target: :id
 ]
 
-case Fyp.Repo.insert(pet_type_data, opts) do
-  {:ok, _} ->
-    Logger.info("Insert pet type info")
-    :ok
-  {:error, reason} ->
-    Logger.warn("Insertion failed. Reason: #{inspect(reason)}")
-    :error
-end
+Enum.each(pet_type_data, fn type ->
+  case Fyp.Repo.insert(type, opts) do
+    {:ok, _} ->
+      Logger.info("Insert pet type info")
+      :ok
+
+    {:error, reason} ->
+      Logger.warn("Insertion failed. Reason: #{inspect(reason)}")
+      :error
+  end
+end)
