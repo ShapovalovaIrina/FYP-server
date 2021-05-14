@@ -24,7 +24,7 @@ data =
       "https://priyut-drug.ru/media/photologue/photos/cache/jpMWEsPU9VI_thumbnail.jpg"
     ],
     shelter_id: 1,
-    pet_type_id: 2
+    type_id: 2
   },
   %{
     birth: "Дек 2019",
@@ -35,7 +35,7 @@ data =
     name: "Урал",
     photos: ["https://priyut-drug.ru/media/photologue/photos/cache/1917dMtps7U_thumbnail.jpg"],
     shelter_id: 1,
-    pet_type_id: 2
+    type_id: 2
   },
   %{
     birth: "Дек 2019",
@@ -46,7 +46,7 @@ data =
     name: "Умчи",
     photos: ["https://priyut-drug.ru/media/photologue/photos/cache/5N6fs4FRR7E_thumbnail.jpg"],
     shelter_id: 1,
-    pet_type_id: 2
+    type_id: 2
   },
   %{
     birth: "Дек 2019",
@@ -57,7 +57,7 @@ data =
     name: "Джамп",
     photos: ["https://priyut-drug.ru/media/photologue/photos/cache/-WHTFWuOjsU_thumbnail.jpg"],
     shelter_id: 1,
-    pet_type_id: 2
+    type_id: 2
   },
   %{
     birth: "Сен 2019",
@@ -68,7 +68,7 @@ data =
     name: "Даго",
     photos: ["https://priyut-drug.ru/media/photologue/photos/cache/s-hljyLIWXA_thumbnail.jpg"],
     shelter_id: 1,
-    pet_type_id: 2
+    type_id: 2
   },
   %{
     birth: "Сен 2019",
@@ -79,7 +79,7 @@ data =
     name: "Дайер",
     photos: ["https://priyut-drug.ru/media/photologue/photos/cache/v5k2LSCDU-o_thumbnail.jpg"],
     shelter_id: 1,
-    pet_type_id: 2
+    type_id: 2
   }
 ]
 

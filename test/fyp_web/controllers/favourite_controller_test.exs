@@ -21,7 +21,7 @@ defmodule FavouriteControllerTest do
       "/media/photologue/photos/mQDrbrDU_z0.jpg",
       "/media/photologue/photos/xoOK2tMRMOU.jpg"],
     "shelter_id" => 1,
-    "pet_type_id" => 2
+    "type_id" => 2
   }
 
   @user_data %{
@@ -83,8 +83,8 @@ defmodule FavouriteControllerTest do
       favourite_pets = json_response(c, 200)
       expected_pet =
         @pet_data
-        |> Map.merge(%{"id" => pet_id, "shelter" => @shelter_data, "pet_type" => @type_data})
-        |> Map.drop(["shelter_id", "pet_type_id"])
+        |> Map.merge(%{"id" => pet_id, "shelter" => @shelter_data, "type" => @type_data})
+        |> Map.drop(["shelter_id", "type_id"])
       assert length(favourite_pets) == 1
       assert [expected_pet] == favourite_pets
     end

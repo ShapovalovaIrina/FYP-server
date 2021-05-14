@@ -13,7 +13,7 @@ defmodule Schemas.Pets do
     - height (string)
     - description (string)
     - shelter_id (id)
-    - pet_type_id (id)
+    - type_id (id)
 
   Has many photos (One to Many relationship with photos).
   Belongs to shelter (Many to one relationship with shelters).
@@ -24,7 +24,7 @@ defmodule Schemas.Pets do
     :name, :breed, :gender,
     :birth, :height, :description,
     :photos, :shelter, :id,
-    :pet_type
+    :type
   ]}
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "pets" do
@@ -36,7 +36,7 @@ defmodule Schemas.Pets do
     field :description, :string
     has_many :photos, Schemas.Photos
     belongs_to :shelter, Schemas.Shelter, foreign_key: :shelter_id, type: :id
-    belongs_to :pet_type, Schemas.PetType, foreign_key: :pet_type_id, type: :id
+    belongs_to :type, Schemas.Type, foreign_key: :type_id, type: :id
     many_to_many :users, Schemas.Users,
                  join_through: "favourite_pets",
                  join_keys: [pet_id: :id, user_id: :id],
@@ -46,6 +46,6 @@ defmodule Schemas.Pets do
   @doc false
   def changeset(pet, attrs) do
     pet
-    |> cast(attrs, [:id, :name, :breed, :gender, :birth, :height, :description, :shelter_id, :pet_type_id])
+    |> cast(attrs, [:id, :name, :breed, :gender, :birth, :height, :description, :shelter_id, :type_id])
   end
 end

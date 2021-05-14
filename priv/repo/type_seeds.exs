@@ -1,6 +1,6 @@
 # Script for populating the database. You can run it as:
 #
-#     mix run priv/repo/pet_type_seeds.exs
+#     mix run priv/repo/type_seeds.exs
 #
 # Inside the script, you can read and write to any of your
 # repositories directly:
@@ -12,12 +12,12 @@
 
 require Logger
 
-pet_type_data = [
-  %Schemas.PetType{
+type_data = [
+  %Schemas.Type{
     id: 1,
     type: "Котик"
   },
-  %Schemas.PetType{
+  %Schemas.Type{
     id: 2,
     type: "Собака"
   }
@@ -28,7 +28,7 @@ opts = [
   conflict_target: :id
 ]
 
-Enum.each(pet_type_data, fn type ->
+Enum.each(type_data, fn type ->
   case Fyp.Repo.insert(type, opts) do
     {:ok, _} ->
       Logger.info("Insert pet type info")

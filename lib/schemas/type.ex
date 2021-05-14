@@ -1,4 +1,4 @@
-defmodule Schemas.PetType do
+defmodule Schemas.Type do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -13,7 +13,7 @@ defmodule Schemas.PetType do
 
   @derive {Jason.Encoder, only: [:type]}
   @primary_key {:id, :id, autogenerate: false}
-  schema "pet_type" do
+  schema "type" do
     field :type, :string
     has_many :pets, Schemas.Pets
   end

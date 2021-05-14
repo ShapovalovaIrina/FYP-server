@@ -22,7 +22,7 @@ defmodule PetControllerTest do
       "/media/photologue/photos/KHqFllxPeAk.jpg",
       "/media/photologue/photos/xoOK2tMRMOU.jpg"],
     "shelter_id" => 1,
-    "pet_type_id" => 2
+    "type_id" => 2
   }
 
   @shelter_data %{
@@ -40,8 +40,8 @@ defmodule PetControllerTest do
     c = get(conn, "/pets")
     expected_pet =
       @pet_data
-      |> Map.merge(%{"id" => id, "shelter" => @shelter_data, "pet_type" => @type_data})
-      |> Map.drop(["shelter_id", "pet_type_id"])
+      |> Map.merge(%{"id" => id, "shelter" => @shelter_data, "type" => @type_data})
+      |> Map.drop(["shelter_id", "type_id"])
     assert json_response(c, 200) == [expected_pet]
   end
 
@@ -50,8 +50,8 @@ defmodule PetControllerTest do
     c = get(conn, "/pets/#{id}")
     expected_pet =
       @pet_data
-      |> Map.merge(%{"id" => id, "shelter" => @shelter_data, "pet_type" => @type_data})
-      |> Map.drop(["shelter_id", "pet_type_id"])
+      |> Map.merge(%{"id" => id, "shelter" => @shelter_data, "type" => @type_data})
+      |> Map.drop(["shelter_id", "type_id"])
     assert json_response(c, 200) == expected_pet
   end
 
@@ -89,8 +89,8 @@ defmodule PetControllerTest do
     c = get(conn, "/pets/#{id}")
     expected_pet =
       @pet_data
-      |> Map.merge(%{"id" => id, "shelter" => @shelter_data, "pet_type" => @type_data})
-      |> Map.drop(["shelter_id", "pet_type_id"])
+      |> Map.merge(%{"id" => id, "shelter" => @shelter_data, "type" => @type_data})
+      |> Map.drop(["shelter_id", "type_id"])
     assert json_response(c, 200) == expected_pet
 
     authorized(conn, "user@mail.com") do
