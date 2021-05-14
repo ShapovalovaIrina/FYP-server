@@ -27,6 +27,10 @@ defmodule PetsTest do
     site_link: ""
   }
 
+  @type_data %{
+    type: "Собака"
+  }
+
   @user_data %{
     id: "ty6kse",
     name: "Username",
@@ -44,8 +48,8 @@ defmodule PetsTest do
       |> Enum.map(fn struct -> Pets.map_from_pet_struct(struct) end)
     expected_pet =
       @data
-      |> Map.merge(%{id: id, shelter: @shelter_data})
-      |> Map.delete(:shelter_id)
+      |> Map.merge(%{id: id, shelter: @shelter_data, pet_type: @type_data})
+      |> Map.drop([:shelter_id, :pet_type_id])
     assert first_pet == [expected_pet]
   end
 
@@ -55,8 +59,8 @@ defmodule PetsTest do
     pet_data = Pets.map_from_pet_struct(pet_data)
     expected_pet =
       @data
-      |> Map.merge(%{id: pet_id, shelter: @shelter_data})
-      |> Map.delete(:shelter_id)
+      |> Map.merge(%{id: pet_id, shelter: @shelter_data, pet_type: @type_data})
+      |> Map.drop([:shelter_id, :pet_type_id])
     assert pet_data == expected_pet
   end
 

@@ -36,6 +36,10 @@ defmodule FavouriteControllerTest do
     "site_link" => ""
   }
 
+  @type_data %{
+    "type" => "Собака"
+  }
+
   test "Add favourite pet to user", %{conn: conn} do
     {:ok, pet_id} = Pets.create(@pet_data)
     user_id = Map.get(@user_data, "id")
@@ -79,8 +83,8 @@ defmodule FavouriteControllerTest do
       favourite_pets = json_response(c, 200)
       expected_pet =
         @pet_data
-        |> Map.merge(%{"shelter" => @shelter_data, "id" => pet_id})
-        |> Map.delete("shelter_id")
+        |> Map.merge(%{"id" => pet_id, "shelter" => @shelter_data, "pet_type" => @type_data})
+        |> Map.drop(["shelter_id", "pet_type_id"])
       assert length(favourite_pets) == 1
       assert [expected_pet] == favourite_pets
     end

@@ -23,7 +23,8 @@ defmodule Schemas.Pets do
   @derive {Jason.Encoder, only: [
     :name, :breed, :gender,
     :birth, :height, :description,
-    :photos, :shelter, :id
+    :photos, :shelter, :id,
+    :pet_type
   ]}
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "pets" do
