@@ -100,4 +100,16 @@ defmodule PetsTest do
     :ok = Pets.delete_pet(pet_id)
     {:error, :not_found} = Pets.pet_by_id(pet_id)
   end
+
+  test "Pet without shelter id" do
+    pet =  %{
+      name: "Демьян",
+      description: "Общительный, ласковый песик.",
+      type_id: 2
+    }
+    :error = Pets.create(pet)
+
+    list = Pets.pet_list()
+    assert length(list) == 0
+  end
 end
