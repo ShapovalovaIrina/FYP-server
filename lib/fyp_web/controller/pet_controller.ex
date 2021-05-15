@@ -54,7 +54,8 @@ defmodule FypWeb.PetController do
       400 => {"Bad status", "application/json", BadStatus},
       401 => {"Unauthenticated", "application/json", Unauthenticated},
       403 => {"Access forbidden", "application/json", AccessForbidden}
-    }
+    },
+    security: [%{"authorization" => []}]
 
 
   def add_pet(conn, params) do
@@ -94,7 +95,8 @@ defmodule FypWeb.PetController do
       401 => {"Unauthenticated", "application/json", Unauthenticated},
       403 => {"Access forbidden", "application/json", AccessForbidden},
       404 => {"Not found", "application/json", NotFoundStatus}
-    }
+    },
+    security: [%{"authorization" => []}]
 
   def remove_pet(conn, %{"id" => id} = _params) do
     case Fyp.Pets.delete_pet(id) do

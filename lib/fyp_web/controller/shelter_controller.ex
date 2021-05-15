@@ -20,7 +20,8 @@ defmodule FypWeb.ShelterController do
       400 => {"Bad status", "application/json", BadStatus},
       401 => {"Unauthenticated", "application/json", Unauthenticated},
       403 => {"Access forbidden", "application/json", AccessForbidden}
-    }
+    },
+    security: [%{"authorization" => []}]
 
   def create(conn, params) do
     case Fyp.Shelter.create(params) do
