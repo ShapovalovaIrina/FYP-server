@@ -31,9 +31,10 @@ defmodule FavouriteControllerTest do
   }
 
   @shelter_data %{
-    "title" => "Shelter Friend",
-    "vk_link" => "",
-    "site_link" => ""
+    "id" => 1,
+    "title" => "Приют \"Друг\"",
+    "vk_link" => "https://vk.com/priyut_drugspb",
+    "site_link" => "http://priyut-drug.ru/"
   }
 
   @type_data %{

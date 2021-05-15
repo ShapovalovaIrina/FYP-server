@@ -12,24 +12,19 @@
 
 require Logger
 
-shelter_data =
-  %Schemas.Shelter{
-    id: 1,
-    title: "Shelter Friend",
-    vk_link: "",
-    site_link: ""
+shelter_data = [
+  %{
+    title: "Приют \"Друг\"",
+    vk_link: "https://vk.com/priyut_drugspb",
+    site_link: "http://priyut-drug.ru/"
+  },
+  %{
+    title: "Приют \"Ржевка\"",
+    vk_link: "https://vk.com/priut_rgevka",
+    site_link: "http://shelter-rzhevka.com/"
   }
-
-opts = [
-  on_conflict: :replace_all,
-  conflict_target: :id
 ]
 
-case Fyp.Repo.insert(shelter_data, opts) do
-  {:ok, _} ->
-    Logger.info("Insert shelter info")
-    :ok
-  {:error, reason} ->
-    Logger.warn("Insertion failed. Reason: #{inspect(reason)}")
-    :error
-end
+Enum.each(shelter_data, fn shelter ->
+  Fyp.Shelter.create(shelter)
+end)

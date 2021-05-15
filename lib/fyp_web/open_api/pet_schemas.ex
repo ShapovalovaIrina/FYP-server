@@ -1,21 +1,6 @@
 defmodule OpenApi.PetSchemas do
   alias OpenApiSpex.Schema
 
-  defmodule Shelter do
-    require OpenApiSpex
-
-    OpenApiSpex.schema(%{
-      description: "Shelter base web contacts",
-      type: :object,
-      additionalProperties: false,
-      properties: %{
-        title: %Schema{type: :string, description: "Shelter title", example: "Shelter Friend"},
-        vk_link: %Schema{type: :string, description: "Shelter VK link", example: "https://vk.com/paperpaper_ru"},
-        site_link: %Schema{type: :string, description: "Shelter site link", example: "https://yandex.ru/"}
-      }
-    })
-  end
-
   defmodule Pet do
     require OpenApiSpex
 
@@ -37,7 +22,7 @@ defmodule OpenApi.PetSchemas do
           type: :string,
           example: "/media/photologue/photos/VTzN9xCbeWg.jpg"
         }},
-        shelter: Shelter
+        shelter: OpenApi.ShelterSchema.Shelter
       }
     })
   end
