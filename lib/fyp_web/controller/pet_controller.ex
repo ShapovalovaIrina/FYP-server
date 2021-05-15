@@ -59,23 +59,16 @@ defmodule FypWeb.PetController do
 
 
   def add_pet(conn, params) do
-    res = case validate_input_pet_params(params) do
-      true -> Fyp.Pets.create(params)
-      false -> :incorrect_body
-    end
-
-    case res do
+    params =
+      if is_list(params["photos"]) do
+          params
+        else
+          Map.replace(params, "photos", [])
+      end
+    case Fyp.Pets.create(params) do
       :error -> conn |> put_status(400) |> json(bad_status())
-      :incorrect_body -> conn |> put_status(400) |> json(bad_status())
       {_, _uuid} -> conn |> put_status(201) |> json(successful_status())
     end
-  end
-
-  defp validate_input_pet_params(params) do
-    Map.has_key?(params, "name") and
-    Map.has_key?(params, "shelter_id") and
-    Map.has_key?(params, "description") and
-    is_list(Map.get(params, "photos"))
   end
 
   operation :remove_pet,

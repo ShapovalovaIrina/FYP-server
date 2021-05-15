@@ -47,5 +47,6 @@ defmodule Schemas.Pets do
   def changeset(pet, attrs) do
     pet
     |> cast(attrs, [:id, :name, :breed, :gender, :birth, :height, :description, :shelter_id, :type_id])
+    |> validate_required([:name, :description, :shelter_id, :type_id])
   end
 end
