@@ -55,6 +55,18 @@ defmodule FypWeb.Router do
     delete "/favourite/:pet_id", FavouriteController, :remove_favourite_pet
   end
 
+  scope "/shelters", FypWeb do
+    pipe_through :no_auth
+
+    get "/", ShelterController, :shelter_list
+  end
+
+  scope "/shelters", FypWeb do
+    pipe_through :admin_auth
+
+    post "/", ShelterController, :create
+  end
+
   scope "/" do
     pipe_through :browser
 

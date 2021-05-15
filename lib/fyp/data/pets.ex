@@ -4,7 +4,7 @@ defmodule Fyp.Pets do
   """
 
   import Ecto.Query
-  alias Schemas.{Pets, Shelter, Type}
+  alias Schemas.{Pets, Type}
   alias Fyp.{Repo, Photos}
   require Logger
 
@@ -105,7 +105,7 @@ defmodule Fyp.Pets do
            ]),
          {_, map_with_shelter} <-
            Map.get_and_update(map, :shelter, fn current_value ->
-             {current_value, struct_shelter_to_map_shelter(current_value)}
+             {current_value, Fyp.Shelter.shelter_struct_to_shelter_map(current_value)}
            end),
         {_, ready_map} <-
           Map.get_and_update(map_with_shelter, :type, fn current_value ->
@@ -117,18 +117,6 @@ defmodule Fyp.Pets do
         Logger.warn("Error in getting map from pet struct. Error: #{inspect(error)}")
         %{}
     end
-  end
-
-  defp struct_shelter_to_map_shelter(%Shelter{} = shelter_struct) do
-    Map.take(shelter_struct, [
-      :title,
-      :vk_link,
-      :site_link
-    ])
-  end
-
-  defp struct_shelter_to_map_shelter(_incorrect_input) do
-    %{}
   end
 
   defp struct_type_to_map_type(%Type{} = type_struct) do
