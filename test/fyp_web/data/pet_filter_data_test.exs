@@ -30,8 +30,8 @@ defmodule PetFilterDataTest do
     pets = Pets.pet_list(filter_cat, [])
     assert length(pets) == 0
 
-    filter_all = ["1", "2"]
-    pets = Pets.pet_list(filter_all, [])
+    filter_all_types = ["1", "2"]
+    pets = Pets.pet_list(filter_all_types, [])
     assert length(pets) == 1
   end
 
@@ -47,12 +47,12 @@ defmodule PetFilterDataTest do
     pets = Pets.pet_list(filter_cat, [])
     assert length(pets) == 1
 
-    filter_all = ["1", "2"]
-    pets = Pets.pet_list(filter_all, [])
+    filter_all_types = ["1", "2"]
+    pets = Pets.pet_list(filter_all_types, [])
     assert length(pets) == 1
   end
 
-  test "Create both" do
+  test "Create both types" do
     {:ok, _} = Pets.create(@data)
     cat = Map.replace(@data, :type_id, 1)
     {:ok, _} = Pets.create(cat)
@@ -65,8 +65,73 @@ defmodule PetFilterDataTest do
     pets = Pets.pet_list(filter_cat, [])
     assert length(pets) == 1
 
-    filter_all = ["1", "2"]
-    pets = Pets.pet_list(filter_all, [])
+    filter_all_types = ["1", "2"]
+    pets = Pets.pet_list(filter_all_types, [])
     assert length(pets) == 2
+  end
+
+  test "Create pet with shelter id 1" do
+    {:ok, _} = Pets.create(@data)
+
+    filter_shelter = ["1"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 1
+
+    filter_shelter = ["2"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 0
+
+    filter_shelter = ["1", "2"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 1
+  end
+
+  test "Create pet with shelter id 2" do
+    new_pet = Map.replace(@data, :shelter_id, 2)
+    {:ok, _} = Pets.create(new_pet)
+
+    filter_shelter = ["1"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 0
+
+    filter_shelter = ["2"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 1
+
+    filter_shelter = ["1", "2"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 1
+  end
+
+  test "Create pets with both shelters" do
+    {:ok, _} = Pets.create(@data)
+    new_pet = Map.replace(@data, :shelter_id, 2)
+    {:ok, _} = Pets.create(new_pet)
+
+    filter_shelter = ["1"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 1
+
+    filter_shelter = ["2"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 1
+
+    filter_shelter = ["1", "2"]
+    pets = Pets.pet_list([], filter_shelter)
+    assert length(pets) == 2
+  end
+
+  test "Combine filter" do
+    {:ok, _} = Pets.create(@data)
+    new_pet = Map.merge(@data, %{shelter_id: 2, type_id: 1})
+    {:ok, _} = Pets.create(new_pet)
+
+    pets = Pets.pet_list([], [])
+    assert length(pets) == 2
+
+    filter_type = ["1"]
+    filter_shelter = ["2"]
+    pets = Pets.pet_list(filter_type, filter_shelter)
+    assert length(pets) == 1
   end
 end
