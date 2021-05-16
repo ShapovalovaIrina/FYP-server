@@ -14,14 +14,29 @@ defmodule FypWeb.PetController do
     Unauthenticated,
     AccessForbidden
   }
-
   alias OpenApi.PetSchemas.{Pet, PetParameters, Pets}
-
+  
   tags ["Pets"]
   security [%{}]
 
   operation :pet_list,
     summary: "Get all pets",
+    parameters: [
+      type_id: [
+        in: :query,
+        description: "Type ID for filtering query. Available type ID can be found from /type endpoint",
+        type: :string,
+        example: "1,2",
+        required: false
+      ],
+      shelter_id: [
+        in: :query,
+        description: "Shelter ID for filtering query. Available type ID can be found from /shelter endpoint",
+        type: :string,
+        example: "2,4",
+        required: false
+      ]
+    ],
     responses: %{
       200 => {"Pet list", "application/json", Pets}
     }
@@ -30,10 +45,7 @@ defmodule FypWeb.PetController do
     shelter_filter = split_shelter_parameter(params["shelter_id"])
     type_filter = split_type_parameter(params["type_id"])
 
-    IO.inspect(shelter_filter)
-    IO.inspect(type_filter)
-
-    pet_list = Fyp.Pets.pet_list(shelter_filter, type_filter)
+    pet_list = Fyp.Pets.pet_list(type_filter, shelter_filter)
     conn |> put_status(200) |> json(pet_list)
   end
 

@@ -122,12 +122,14 @@ defmodule PetFilterDataTest do
   end
 
   test "Combine filter" do
-    {:ok, _} = Pets.create(@data)
-    new_pet = Map.merge(@data, %{shelter_id: 2, type_id: 1})
+    {:ok, _} = Pets.create(@data) # type_id: 2, shelter_id: 1
+    new_pet = Map.replace(@data, :type_id, 1) # type_id: 1, shelter_id: 1
+    {:ok, _} = Pets.create(new_pet)
+    new_pet = Map.replace(new_pet, :shelter_id, 2) # type_id: 1, shelter_id: 2
     {:ok, _} = Pets.create(new_pet)
 
     pets = Pets.pet_list([], [])
-    assert length(pets) == 2
+    assert length(pets) == 3
 
     filter_type = ["1"]
     filter_shelter = ["2"]

@@ -58,9 +58,7 @@ defmodule Fyp.Pets do
   end
 
   defp add_type_filter(query, type_filter) do
-    Enum.reduce(type_filter, query, fn value, acc ->
-      from q in acc, or_where: field(q, :type_id) == ^value
-    end)
+    from q in query, where: q.type_id in ^type_filter
   end
 
   defp add_shelter_filter(query, []) do
@@ -68,9 +66,7 @@ defmodule Fyp.Pets do
   end
 
   defp add_shelter_filter(query, shelter_filter) do
-    Enum.reduce(shelter_filter, query, fn value, acc ->
-      from q in acc, or_where: field(q, :shelter_id) == ^value
-    end)
+    from q in query, where: q.shelter_id in ^shelter_filter
   end
 
   def pet_by_id(id) do

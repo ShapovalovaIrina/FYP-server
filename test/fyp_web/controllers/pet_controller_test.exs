@@ -38,7 +38,7 @@ defmodule PetControllerTest do
 
   test "Get pet list", %{conn: conn} do
     {:ok, id} = Pets.create(@pet_data)
-    c = get(conn, "/pets?shelter_id=1,2")
+    c = get(conn, "/pets")
     expected_pet =
       @pet_data
       |> Map.merge(%{"id" => id, "shelter" => @shelter_data, "type" => @type_data})
@@ -95,7 +95,7 @@ defmodule PetControllerTest do
     assert json_response(c, 200) == expected_pet
 
     authorized(conn, "user@mail.com") do
-      c = delete(conn, "/pets/#{id}")
+      _c = delete(conn, "/pets/#{id}")
     end
 
     c = get(conn, "/pets/#{id}")
