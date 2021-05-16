@@ -6,21 +6,63 @@ defmodule FypWeb.PetController do
   use FypWeb, :controller
   use OpenApiSpex.ControllerSpecs
   import FypWeb.ControllerUtils
-  alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus, Unauthenticated, AccessForbidden}
-  alias OpenApi.PetSchemas.{Pet, PetParameters, Pets}
 
+  alias OpenApi.ResponsesSchema.{
+    SuccessfulStatus,
+    BadStatus,
+    NotFoundStatus,
+    Unauthenticated,
+    AccessForbidden
+  }
+  alias OpenApi.PetSchemas.{Pet, PetParameters, Pets}
+  
   tags ["Pets"]
   security [%{}]
 
   operation :pet_list,
     summary: "Get all pets",
+    parameters: [
+      type_id: [
+        in: :query,
+        description: "Type ID for filtering query. Available type ID can be found from /type endpoint",
+        type: :string,
+        example: "1,2",
+        required: false
+      ],
+      shelter_id: [
+        in: :query,
+        description: "Shelter ID for filtering query. Available type ID can be found from /shelter endpoint",
+        type: :string,
+        example: "2,4",
+        required: false
+      ]
+    ],
     responses: %{
       200 => {"Pet list", "application/json", Pets}
     }
 
-  def pet_list(conn, _params) do
-    pet_list = Fyp.Pets.pet_list()
+  def pet_list(conn, params) do
+    shelter_filter = split_shelter_parameter(params["shelter_id"])
+    type_filter = split_type_parameter(params["type_id"])
+
+    pet_list = Fyp.Pets.pet_list(type_filter, shelter_filter)
     conn |> put_status(200) |> json(pet_list)
+  end
+
+  defp split_shelter_parameter(shelter_id) do
+    if shelter_id do
+      String.split(shelter_id, ",", trim: true)
+    else
+      []
+    end
+  end
+
+  defp split_type_parameter(type_id) do
+    if type_id do
+      String.split(type_id, ",", trim: true)
+    else
+      []
+    end
   end
 
   operation :pet,
@@ -57,14 +99,14 @@ defmodule FypWeb.PetController do
     },
     security: [%{"authorization" => []}]
 
-
   def add_pet(conn, params) do
     params =
       if is_list(params["photos"]) do
-          params
-        else
-          Map.replace(params, "photos", [])
+        params
+      else
+        Map.replace(params, "photos", [])
       end
+
     case Fyp.Pets.create(params) do
       :error -> conn |> put_status(400) |> json(bad_status())
       {_, _uuid} -> conn |> put_status(201) |> json(successful_status())

@@ -40,15 +40,41 @@ defmodule Fyp.Pets do
     end
   end
 
-  def pet_list() do
+  def pet_list(type_filter \\ [], shelter_filter \\ []) do
     query =
-      from pet in Pets,
-        preload: [:photos, :shelter, :type]
+      Pets
+      |> add_type_filter(type_filter)
+      |> add_shelter_filter(shelter_filter)
+      |> preload([:photos, :shelter, :type])
 
     Repo.all(query)
     |> Enum.map(fn pet ->
       Map.update(pet, :photos, [], fn photos -> Photos.struct_list_to_map_list(photos) end)
     end)
+  end
+
+  defp add_type_filter(query, []) do
+    query
+  end
+
+  defp add_type_filter(query, type_filter) when is_list(type_filter) do
+    from q in query, where: q.type_id in ^type_filter
+  end
+
+  defp add_type_filter(query, _incorrect_filter) do
+    query
+  end
+
+  defp add_shelter_filter(query, []) do
+    query
+  end
+
+  defp add_shelter_filter(query, shelter_filter) when is_list(shelter_filter) do
+    from q in query, where: q.shelter_id in ^shelter_filter
+  end
+
+  defp add_shelter_filter(query, _incorrect_filter) do
+    query
   end
 
   def pet_by_id(id) do
@@ -82,9 +108,7 @@ defmodule Fyp.Pets do
         :not_found
 
       {:error, changeset} ->
-        Logger.error(
-          "Error in pet deletion. Pet id: #{id}. Changeset: #{inspect(changeset)}"
-        )
+        Logger.error("Error in pet deletion. Pet id: #{id}. Changeset: #{inspect(changeset)}")
         :error
     end
   end
@@ -107,10 +131,10 @@ defmodule Fyp.Pets do
            Map.get_and_update(map, :shelter, fn current_value ->
              {current_value, Fyp.Shelter.shelter_struct_to_shelter_map(current_value)}
            end),
-        {_, ready_map} <-
-          Map.get_and_update(map_with_shelter, :type, fn current_value ->
-            {current_value, struct_type_to_map_type(current_value)}
-          end) do
+         {_, ready_map} <-
+           Map.get_and_update(map_with_shelter, :type, fn current_value ->
+             {current_value, struct_type_to_map_type(current_value)}
+           end) do
       ready_map
     else
       error ->
