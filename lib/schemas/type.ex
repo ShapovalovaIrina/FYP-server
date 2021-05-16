@@ -11,7 +11,7 @@ defmodule Schemas.Type do
   Has many pets (One to Many relationship with pets).
   """
 
-  @derive {Jason.Encoder, only: [:type]}
+  @derive {Jason.Encoder, only: [:id, :type]}
   @primary_key {:id, :id, autogenerate: false}
   schema "type" do
     field :type, :string
