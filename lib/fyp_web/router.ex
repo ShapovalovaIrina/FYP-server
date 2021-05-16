@@ -67,6 +67,12 @@ defmodule FypWeb.Router do
     post "/", ShelterController, :create
   end
 
+  scope "/types", FypWeb do
+    pipe_through :no_auth
+
+    get "/", TypeController, :type_list
+  end
+
   scope "/" do
     pipe_through :browser
 

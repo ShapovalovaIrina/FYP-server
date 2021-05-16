@@ -33,6 +33,7 @@ defmodule PetControllerTest do
   }
 
   @type_data %{
+    "id" => 2,
     "type" => "Собака"
   }
 
