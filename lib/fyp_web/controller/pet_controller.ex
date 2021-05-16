@@ -6,7 +6,15 @@ defmodule FypWeb.PetController do
   use FypWeb, :controller
   use OpenApiSpex.ControllerSpecs
   import FypWeb.ControllerUtils
-  alias OpenApi.ResponsesSchema.{SuccessfulStatus, BadStatus, NotFoundStatus, Unauthenticated, AccessForbidden}
+
+  alias OpenApi.ResponsesSchema.{
+    SuccessfulStatus,
+    BadStatus,
+    NotFoundStatus,
+    Unauthenticated,
+    AccessForbidden
+  }
+
   alias OpenApi.PetSchemas.{Pet, PetParameters, Pets}
 
   tags ["Pets"]
@@ -18,9 +26,31 @@ defmodule FypWeb.PetController do
       200 => {"Pet list", "application/json", Pets}
     }
 
-  def pet_list(conn, _params) do
-    pet_list = Fyp.Pets.pet_list()
+  def pet_list(conn, params) do
+    shelter_filter = split_shelter_parameter(params["shelter_id"])
+    type_filter = split_type_parameter(params["type_id"])
+
+    IO.inspect(shelter_filter)
+    IO.inspect(type_filter)
+
+    pet_list = Fyp.Pets.pet_list(shelter_filter, type_filter)
     conn |> put_status(200) |> json(pet_list)
+  end
+
+  defp split_shelter_parameter(shelter_id) do
+    if shelter_id do
+      String.split(shelter_id, ",", trim: true)
+    else
+      []
+    end
+  end
+
+  defp split_type_parameter(type_id) do
+    if type_id do
+      String.split(type_id, ",", trim: true)
+    else
+      []
+    end
   end
 
   operation :pet,
@@ -57,14 +87,14 @@ defmodule FypWeb.PetController do
     },
     security: [%{"authorization" => []}]
 
-
   def add_pet(conn, params) do
     params =
       if is_list(params["photos"]) do
-          params
-        else
-          Map.replace(params, "photos", [])
+        params
+      else
+        Map.replace(params, "photos", [])
       end
+
     case Fyp.Pets.create(params) do
       :error -> conn |> put_status(400) |> json(bad_status())
       {_, _uuid} -> conn |> put_status(201) |> json(successful_status())

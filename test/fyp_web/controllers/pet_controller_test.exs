@@ -38,7 +38,7 @@ defmodule PetControllerTest do
 
   test "Get pet list", %{conn: conn} do
     {:ok, id} = Pets.create(@pet_data)
-    c = get(conn, "/pets")
+    c = get(conn, "/pets?shelter_id=1,2")
     expected_pet =
       @pet_data
       |> Map.merge(%{"id" => id, "shelter" => @shelter_data, "type" => @type_data})
