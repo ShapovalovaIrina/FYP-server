@@ -57,16 +57,24 @@ defmodule Fyp.Pets do
     query
   end
 
-  defp add_type_filter(query, type_filter) do
+  defp add_type_filter(query, type_filter) when is_list(type_filter) do
     from q in query, where: q.type_id in ^type_filter
+  end
+
+  defp add_type_filter(query, _incorrect_filter) do
+    query
   end
 
   defp add_shelter_filter(query, []) do
     query
   end
 
-  defp add_shelter_filter(query, shelter_filter) do
+  defp add_shelter_filter(query, shelter_filter) when is_list(shelter_filter) do
     from q in query, where: q.shelter_id in ^shelter_filter
+  end
+
+  defp add_shelter_filter(query, _incorrect_filter) do
+    query
   end
 
   def pet_by_id(id) do
