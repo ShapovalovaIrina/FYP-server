@@ -61,4 +61,44 @@ defmodule OpenApi.PetSchemas do
       items: Pet
     })
   end
+
+  defmodule Metadata do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "Metadata for cursor-based pagination",
+      type: :object,
+      additionalProperties: false,
+      properties: %{
+        after: %Schema{type: :string, description: "An opaque cursor representing the last row of the current page"},
+        before: %Schema{type: :string, description: "An opaque cursor representing the first row of the current page"},
+        limit: %Schema{type: :string, description: "The maximum number of entries that can be contained in this page"},
+        total_count: %Schema{type: :string, description: "The total number of entries matching the query"},
+        total_count_cap_exceeded: %Schema{type: :string, description: "A boolean indicating whether the total_count_limit was exceeded"}
+      },
+      required: [:after, :before, :limit, :total_count, :total_count_cap_exceeded],
+      example: %{
+        "after" => "g3QAAAABZAACaWRhAQ==",
+        "before" => "g3QAAAACZAACaWRhAWQABG5hbWVtAAAABUFsaWNl",
+        "limit" => 10,
+        "total_count" => "100",
+        "total_count_cap_exceeded" => false
+      }
+    })
+  end
+
+  defmodule PetsPagination do
+    require OpenApiSpex
+
+    OpenApiSpex.schema(%{
+      description: "Pet chunks with pagination metadata",
+      type: :object,
+      dditionalProperties: false,
+      properties: %{
+        entries: Pets,
+        metadata: Metadata
+      },
+      required: [:after, :before, :limit, :total_count, :total_count_cap_exceeded],
+    })
+  end
 end

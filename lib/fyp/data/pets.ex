@@ -40,6 +40,27 @@ defmodule Fyp.Pets do
     end
   end
 
+  def pet_list_pagination(type_filter \\ [], shelter_filter \\ [], limit_value \\ 10, cursor \\ nil, direction \\ :after) do
+    query =
+      Pets
+      |> add_type_filter(type_filter)
+      |> add_shelter_filter(shelter_filter)
+      |> preload([:photos, :shelter, :type])
+
+    %{entries: entries, metadata: metadata} =
+      case {cursor, direction} do
+        {nil, _} -> Repo.paginate(query, cursor_fields: [:name, :shelter_id, :type_id], limit: limit_value)
+        {cursor_value, :after} -> Repo.paginate(query, after: cursor_value, cursor_fields: [:name, :shelter_id, :type_id], limit: limit_value)
+        {cursor_value, :before} -> Repo.paginate(query, before: cursor_value, cursor_fields: [:name, :shelter_id, :type_id], limit: limit_value)
+      end
+
+    entries =
+      Enum.map(entries, fn pet ->
+        Map.update(pet, :photos, [], fn photos -> Photos.struct_list_to_map_list(photos) end)
+      end)
+    %{entries: entries, metadata: metadata}
+  end
+
   def pet_list(type_filter \\ [], shelter_filter \\ []) do
     query =
       Pets

@@ -14,7 +14,7 @@ defmodule FypWeb.PetController do
     Unauthenticated,
     AccessForbidden
   }
-  alias OpenApi.PetSchemas.{Pet, PetParameters, Pets}
+  alias OpenApi.PetSchemas.{Pet, PetParameters, Pets, PetsPagination}
   
   tags ["Pets"]
   security [%{}]
@@ -50,19 +50,84 @@ defmodule FypWeb.PetController do
   end
 
   defp split_shelter_parameter(shelter_id) do
-    if shelter_id do
-      String.split(shelter_id, ",", trim: true)
-    else
-      []
-    end
+    if shelter_id, do: String.split(shelter_id, ",", trim: true), else: []
   end
 
   defp split_type_parameter(type_id) do
-    if type_id do
-      String.split(type_id, ",", trim: true)
-    else
-      []
+    if type_id, do: String.split(type_id, ",", trim: true), else: []
+  end
+
+  operation :pet_chunks,
+    summary: "Get pet data by chunks (cursor-based pagination)",
+    parameters: [
+      type_id: [
+        in: :query,
+        description: "Type ID for filtering query. Available type ID can be found from /type endpoint",
+        type: :string,
+        example: "1,2",
+        required: false
+      ],
+      shelter_id: [
+        in: :query,
+        description: "Shelter ID for filtering query. Available type ID can be found from /shelter endpoint",
+        type: :string,
+        example: "2,4",
+        required: false
+      ],
+      limit: [
+        in: :query,
+        description: "Entries limit for query. Default value is 10",
+        type: :integer,
+        example: "10",
+        required: false
+      ],
+      cursor: [
+        in: :query,
+        description: "Cursor for requesting next/previous entries. Available after first request without cursor. If no cursor provided, first {limit} entries are fetched",
+        type: :string,
+        example: "g3QAAAABZAACaWRhAQ==",
+        required: false
+      ],
+      direction: [
+        in: :query,
+        description: "Query direction. Available types: after, before. Default direction is after",
+        type: :string,
+        example: "after",
+        required: false
+      ]
+    ],
+    responses: %{
+      200 => {"Pet list", "application/json", PetsPagination}
+    }
+
+  def pet_chunks(conn, params) do
+    shelter_filter = split_shelter_parameter(params["shelter_id"])
+    type_filter = split_type_parameter(params["type_id"])
+    limit = parse_limit_parameter(params["limit"])
+    cursor = parse_cursor_parameter(params["cursor"])
+    direction = parse_direction_parameter(params["direction"])
+
+    pet_list_with_metadata = Fyp.Pets.pet_list_pagination(type_filter, shelter_filter, limit, cursor, direction)
+    conn |> put_status(200) |> json(pet_list_with_metadata)
+  end
+
+  defp parse_limit_parameter(limit) when not is_nil(limit) do
+    case Integer.parse(limit) do
+      {int, _binary} -> int
+      :error -> 10
     end
+  end
+
+  defp parse_limit_parameter(_limit)  do
+    10
+  end
+
+  defp parse_cursor_parameter(cursor) do
+    if is_bitstring(cursor), do: cursor, else: nil
+  end
+
+  defp parse_direction_parameter(direction) do
+    if direction in ["before", "after"], do: String.to_atom(direction), else: :after
   end
 
   operation :pet,

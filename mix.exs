@@ -54,7 +54,10 @@ defmodule Fyp.MixProject do
       {:confex, "~> 3.5"},
 
       # Open API (Swagger)
-      {:open_api_spex, "~> 3.10"}
+      {:open_api_spex, "~> 3.10"},
+
+      # Pagination
+      {:paginator, "~> 1.0.4"}
     ]
   end
 

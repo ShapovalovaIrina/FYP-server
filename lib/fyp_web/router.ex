@@ -33,6 +33,7 @@ defmodule FypWeb.Router do
     pipe_through :no_auth
 
     get "/", PetController, :pet_list
+    get "/chunks", PetController, :pet_chunks
     get "/:id", PetController, :pet
   end
 
