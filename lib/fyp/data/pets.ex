@@ -45,6 +45,7 @@ defmodule Fyp.Pets do
       Pets
       |> add_type_filter(type_filter)
       |> add_shelter_filter(shelter_filter)
+      |> order_by([:name, :shelter_id, :type_id])
       |> preload([:photos, :shelter, :type])
 
     %{entries: entries, metadata: metadata} =
