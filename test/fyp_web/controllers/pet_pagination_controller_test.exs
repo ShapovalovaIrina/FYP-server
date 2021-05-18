@@ -28,26 +28,27 @@ defmodule PetPaginationControllerTest do
 
     c = get(conn, "/pets/chunks?limit=3")               # request for first 3 entities
     %{"entries" => pets, "metadata" => metadata} = json_response(c, 200)
+    pet_0 = Enum.at(pets, 0)
+    pet_1 = Enum.at(pets, 1)
+    pet_2 = Enum.at(pets, 2)
     assert length(pets) == 3
-    assert {2, 1} == {Enum.at(pets, 0)["type"]["id"], Enum.at(pets, 0)["shelter"]["id"]}
-    assert {1, 1} == {Enum.at(pets, 1)["type"]["id"], Enum.at(pets, 1)["shelter"]["id"]}
-    assert {1, 2} == {Enum.at(pets, 2)["type"]["id"], Enum.at(pets, 2)["shelter"]["id"]}
     assert metadata["after"] != nil
     assert metadata["before"] == nil
 
     c = get(conn, "/pets/chunks?limit=3&cursor=#{metadata["after"]}") # request for last entity with cursor
     %{"entries" => pets, "metadata" => metadata} = json_response(c, 200)
+    pet_4 = Enum.at(pets, 0)
     assert length(pets) == 1
-    assert {2, 2} == {Enum.at(pets, 0)["type"]["id"], Enum.at(pets, 0)["shelter"]["id"]}
+    assert pet_4 != pet_0 && pet_4 != pet_1 && pet_4 != pet_2
     assert metadata["after"] == nil
     assert metadata["before"] != nil
 
     c = get(conn, "/pets/chunks?limit=3&cursor=#{metadata["before"]}&direction=before") # request for first 3 entities with cursor and before direction
     %{"entries" => pets, "metadata" => metadata} = json_response(c, 200)
     assert length(pets) == 3
-    assert {2, 1} == {Enum.at(pets, 2)["type"]["id"], Enum.at(pets, 2)["shelter"]["id"]}
-    assert {1, 1} == {Enum.at(pets, 1)["type"]["id"], Enum.at(pets, 1)["shelter"]["id"]}
-    assert {1, 2} == {Enum.at(pets, 1)["type"]["id"], Enum.at(pets, 0)["shelter"]["id"]}
+    assert pet_2 == Enum.at(pets, 2)
+    assert pet_1 == Enum.at(pets, 1)
+    assert pet_0 == Enum.at(pets, 0)
     assert metadata["after"] != nil
     assert metadata["before"] == nil
   end
