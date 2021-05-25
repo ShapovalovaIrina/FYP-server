@@ -58,7 +58,6 @@ defimpl Fyp.Validator, for: Fyp.FirebaseValidator do
   end
 
   def verify_token(validator, jwt) do
-    IO.inspect(jwt, label: "Verify token, jwt")
     token_mod = validator.token
     hooks = [
       {

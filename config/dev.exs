@@ -5,7 +5,7 @@ config :fyp, Fyp.Repo,
   username: {:system, "REPO_USERNAME", "postgres"},
   password: {:system, "REPO_PASSWORD", "postgres"},
   database: {:system, "REPO_DATABASE", "fyp"},
-  hostname: {:system, "REPO_HOSTNAME", "pghost"},
+  hostname: {:system, "REPO_HOSTNAME", "localhost"},
   port: {:system, :integer, "REPO_PORT", 5432},
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -48,7 +48,8 @@ config :fyp, FypWeb.Endpoint,
 # different ports.
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+# config :logger, :console, format: "[$level] $message\n"
+config :logger, level: :info
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
