@@ -20,8 +20,9 @@ data =
     height: "50 см",
     name: "Демьян",
     photos: [
-      "https://priyut-drug.ru/media/photologue/photos/cache/VTzN9xCbeWg_thumbnail.jpg",
-      "https://priyut-drug.ru/media/photologue/photos/cache/jpMWEsPU9VI_thumbnail.jpg"
+      "http://priyut-drug.ru/media/photologue/photos/VTzN9xCbeWg.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/mQDrbrDU_z0.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/_ncHhW9vlX4.jpg"
     ],
     shelter_id: 1,
     type_id: 2
@@ -33,7 +34,10 @@ data =
     gender: "мальчик",
     height: "60 см",
     name: "Урал",
-    photos: ["https://priyut-drug.ru/media/photologue/photos/cache/1917dMtps7U_thumbnail.jpg"],
+    photos: [
+      "http://priyut-drug.ru/media/photologue/photos/8PiwXwuBvxc.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/1917dMtps7U.jpg"
+    ],
     shelter_id: 1,
     type_id: 2
   },
@@ -44,7 +48,10 @@ data =
     gender: "девочка",
     height: "50 см",
     name: "Умчи",
-    photos: ["https://priyut-drug.ru/media/photologue/photos/cache/5N6fs4FRR7E_thumbnail.jpg"],
+    photos: [
+      "http://priyut-drug.ru/media/photologue/photos/5uYo8q25Juc.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/0v5HQ86wUPk.jpg"
+    ],
     shelter_id: 1,
     type_id: 2
   },
@@ -55,7 +62,11 @@ data =
     gender: "мальчик",
     height: "65 см",
     name: "Джамп",
-    photos: ["https://priyut-drug.ru/media/photologue/photos/cache/-WHTFWuOjsU_thumbnail.jpg"],
+    photos: [
+      "http://priyut-drug.ru/media/photologue/photos/hXVrhCEl3-M.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/IbmZu-iiXOU.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/kpVoxCcedhw.jpg"
+    ],
     shelter_id: 1,
     type_id: 2
   },
@@ -66,7 +77,10 @@ data =
     gender: "мальчик",
     height: "60 см",
     name: "Даго",
-    photos: ["https://priyut-drug.ru/media/photologue/photos/cache/s-hljyLIWXA_thumbnail.jpg"],
+    photos: [
+      "http://priyut-drug.ru/media/photologue/photos/zNG0JXKtqIo.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/EKbAxyFiiiM.jpg"
+    ],
     shelter_id: 1,
     type_id: 2
   },
@@ -77,7 +91,12 @@ data =
     gender: "мальчик",
     height: "60 см",
     name: "Дайер",
-    photos: ["https://priyut-drug.ru/media/photologue/photos/cache/v5k2LSCDU-o_thumbnail.jpg"],
+    photos: [
+      "http://priyut-drug.ru/media/photologue/photos/JHmlyYnLtgw.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/nZU4NQlVnVo.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/7p67VtTc3OA.jpg",
+      "http://priyut-drug.ru/media/photologue/photos/v5k2LSCDU-o.jpg"
+    ],
     shelter_id: 1,
     type_id: 2
   }
