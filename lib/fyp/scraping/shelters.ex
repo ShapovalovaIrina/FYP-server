@@ -5,3 +5,7 @@ end
 defmodule ShelterFriend do
   defstruct [:link]
 end
+
+defmodule ShelterIlinka do
+  defstruct [:link]
+end
