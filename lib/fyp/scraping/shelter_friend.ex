@@ -3,12 +3,13 @@ defmodule Fyp.Scraping.ShelterFriend do
 
   def get_pets_url(url) do
     Logger.warn("Getting data from #{url}")
+
     with {:ok, %HTTPoison.Response{status_code: 200, body: body}} <- HTTPoison.get(url),
          {:ok, html_tree} <- Floki.parse_document!(body) do
       urls =
         html_tree
         |> Floki.find("table")
-          # As photo is also a url, but without text
+        # As photo is also a url, but without text
         |> Floki.find("a:fl-contains('')")
         |> Floki.attribute("href")
 
@@ -17,6 +18,7 @@ defmodule Fyp.Scraping.ShelterFriend do
         |> Floki.find("li[class=arrow]")
         |> Floki.find("a")
         |> Floki.attribute("href")
+
       case have_next do
         [] -> urls
         [next_page] -> urls ++ get_pets_url(url <> next_page)
@@ -25,9 +27,11 @@ defmodule Fyp.Scraping.ShelterFriend do
       {:error, %HTTPoison.Response{status_code: 404}} ->
         Logger.error("HTTPoison. Page is not found. Url: #{url}")
         []
+
       {:error, %HTTPoison.Error{reason: reason}} ->
         Logger.error("HTTPoison. Page error. Url: #{url}. Reason: #{inspect(reason)}")
         []
+
       {:error, reason} ->
         Logger.error("Error. Url: #{url}. Reason: #{inspect(reason)}")
         []
@@ -50,13 +54,14 @@ defmodule Fyp.Scraping.ShelterFriend do
   def get_pet_name(body) do
     body
     |> Floki.find("h1")
-    |> Floki.text
+    |> Floki.text()
   end
 
-  def get_pet_photos(body) do
+  def get_pet_photos(body, base_url) do
     body
     |> Floki.find("ul.clearing-thumbs, li, a.th")
     |> Floki.attribute("href")
+    |> Enum.map(fn photo_url -> base_url <> photo_url end)
   end
 
   def get_pet_breed(body) do
@@ -64,7 +69,7 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Floki.find("table")
     |> Floki.find("tr:nth-child(1)")
     |> Floki.find("td:last-child")
-    |> Floki.text
+    |> Floki.text()
   end
 
   def get_pet_gender(body) do
@@ -72,7 +77,7 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Floki.find("table")
     |> Floki.find("tr:nth-child(2)")
     |> Floki.find("td:last-child")
-    |> Floki.text
+    |> Floki.text()
   end
 
   def get_pet_birthday(body) do
@@ -80,7 +85,7 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Floki.find("table")
     |> Floki.find("tr:nth-child(3)")
     |> Floki.find("td:last-child")
-    |> Floki.text
+    |> Floki.text()
   end
 
   def get_pet_height(body) do
@@ -88,14 +93,14 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Floki.find("table")
     |> Floki.find("tr:nth-child(4)")
     |> Floki.find("td:last-child")
-    |> Floki.text
+    |> Floki.text()
   end
 
   def get_pet_description(body) do
     body
     |> Floki.find("p[class=text-justify]")
     |> Floki.find("p:first-of-type")
-    |> Floki.text
+    |> Floki.text()
   end
 end
 
@@ -115,7 +120,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterFriend do
           birth: get_pet_birthday(body),
           height: get_pet_height(body),
           description: get_pet_description(body),
-          photos: get_pet_photos(body),
+          photos: get_pet_photos(body, url),
           shelter_id: 0,
           type_id: 1
         }
