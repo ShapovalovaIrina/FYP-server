@@ -6,7 +6,7 @@ defmodule Fyp.Scraping.DataAggregation do
   require Logger
 
   @shelter_list [
-    %ShelterFriend{link: "http://priyut-drug.ru/take/"}
+    %ShelterFriend{link: "http://priyut-drug.ru"}
   ]
 
   def start_link(_) do
