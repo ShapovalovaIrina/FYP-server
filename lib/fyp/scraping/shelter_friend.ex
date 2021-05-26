@@ -9,7 +9,7 @@ defmodule Fyp.Scraping.ShelterFriend do
       urls =
         html_tree
         |> Floki.find("table")
-        # As photo is also a url, but without text
+          # As photo is also a url, but without text
         |> Floki.find("a:fl-contains('')")
         |> Floki.attribute("href")
 
@@ -53,25 +53,53 @@ defmodule Fyp.Scraping.ShelterFriend do
 
   def get_pet_name(body) do
     body
-    |> Floki.find(".petcard, .desc, .masha_index masha_index1")
+    |> Floki.find("h1")
     |> Floki.text()
   end
 
   def get_pet_photos(body, base_url) do
     body
-    |> Floki.find(".pics, ul.thumb, li, img")
-    |> Floki.attribute("src")
+    |> Floki.find("ul.clearing-thumbs, li, a.th")
+    |> Floki.attribute("href")
+    |> Enum.map(fn photo_url -> base_url <> photo_url end)
+  end
+
+  def get_pet_breed(body) do
+    body
+    |> Floki.find("table")
+    |> Floki.find("tr:nth-child(1)")
+    |> Floki.find("td:last-child")
+    |> Floki.text()
+  end
+
+  def get_pet_gender(body) do
+    body
+    |> Floki.find("table")
+    |> Floki.find("tr:nth-child(2)")
+    |> Floki.find("td:last-child")
+    |> Floki.text()
   end
 
   def get_pet_birthday(body) do
     body
-    |> Floki.find(".petcard, .desc, .masha_index masha_index1")
+    |> Floki.find("table")
+    |> Floki.find("tr:nth-child(3)")
+    |> Floki.find("td:last-child")
+    |> Floki.text()
+  end
+
+  def get_pet_height(body) do
+    body
+    |> Floki.find("table")
+    |> Floki.find("tr:nth-child(4)")
+    |> Floki.find("td:last-child")
     |> Floki.text()
   end
 
   def get_pet_description(body) do
     body
-    |> Floki.find(".petcard, .desc, span")
+    |> Floki.find("p[class=text-justify]")
+    |> Floki.find("p:first-of-type")
     |> Floki.text()
   end
 end
@@ -87,10 +115,10 @@ defimpl Fyp.Scraping.Shelters, for: ShelterFriend do
       |> Enum.map(fn body ->
         %{
           name: get_pet_name(body),
-          breed: nil,
-          gender: nil,
+          breed: get_pet_breed(body),
+          gender: get_pet_gender(body),
           birth: get_pet_birthday(body),
-          height: nil,
+          height: get_pet_height(body),
           description: get_pet_description(body),
           photos: get_pet_photos(body, url),
           shelter_id: 0,

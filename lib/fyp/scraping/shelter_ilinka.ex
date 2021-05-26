@@ -5,18 +5,18 @@ defmodule Fyp.Scraping.ShelterIlinka do
     Logger.warn("Getting data from #{url}")
 
     with {:ok, %HTTPoison.Response{status_code: 200, body: body}} <- HTTPoison.get(url),
-         {:ok, html_tree} <- Floki.parse_document!(body) do
+         {:ok, html_tree} <- Floki.parse_document(body) do
       urls =
         html_tree
-        |> Floki.find(".cblock petcards, .pcard, h2")
-        |> IO.inspect()
+        |> Floki.find(".cblock petcards, .pcard")
+        |> Floki.find("h2")
+        |> Floki.find("a")
         |> Floki.attribute("href")
 
       have_next =
         html_tree
         |> Floki.find(".pager")
-        |> Floki.find("a:[text=Далее]")
-        |> IO.inspect()
+        |> Floki.find("a:fl-contains('Далее')")
         |> Floki.attribute("href")
 
       case have_next do
@@ -50,6 +50,43 @@ defmodule Fyp.Scraping.ShelterIlinka do
       end
     end)
   end
+
+  def get_pet_name(body) do
+    body
+    |> Floki.find("div[class=petcard]:first-child")
+    |> Floki.find("div.desc")
+    |> Floki.find("p")
+    |> Floki.find("strong")
+    |> Floki.text()
+  end
+
+  def get_pet_photos(body) do
+    body
+    |> Floki.find("div.pics")
+    |> Floki.find("ul.thumb")
+    |> Floki.find("li")
+    |> Floki.find("img")
+    |> Floki.attribute("src")
+    |> IO.inspect
+  end
+
+  def get_pet_birthday(body) do
+    body
+    |> Floki.find("div[class=petcard]:first-child")
+    |> Floki.find("div.desc")
+    |> Floki.find("p")
+    |> Floki.find("strong")
+    |> Floki.text()
+  end
+
+  def get_pet_description(body) do
+    body
+    |> Floki.find("div[class=petcard]:first-child")
+    |> Floki.find("div.desc")
+    |> Floki.text(deep: false)
+    |> String.replace("\n", "")
+    |> String.replace("\t", "")
+  end
 end
 
 defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
@@ -66,22 +103,20 @@ defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
     pets =
       categories
       |> Enum.reduce([], fn category, acc -> acc ++ get_pets_url(url <> category) end)
-
-    Logger.warn("#{inspect(pets)}")
-#      |> get_pets_html_body(url)
-#      |> Enum.map(fn body ->
-#        %{
-#          name: get_pet_name(body),
-#          breed: get_pet_breed(body),
-#          gender: get_pet_gender(body),
-#          birth: get_pet_birthday(body),
-#          height: get_pet_height(body),
-#          description: get_pet_description(body),
-#          photos: get_pet_photos(body, url),
-#          shelter_id: 3,
-#          type_id: 1
-#        }
-#      end)
+      |> get_pets_html_body
+      |> Enum.map(fn body ->
+        %{
+          name: get_pet_name(body),
+          breed: nil,
+          gender: nil,
+          birth: get_pet_birthday(body),
+          height: nil,
+          description: get_pet_description(body),
+          photos: get_pet_photos(body),
+          shelter_id: 3,
+          type_id: 1
+        }
+      end)
 #      |> Enum.each(fn pet -> Fyp.Pets.create(pet) end)
   end
 end
