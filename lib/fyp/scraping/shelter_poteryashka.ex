@@ -61,13 +61,28 @@ defmodule Fyp.Scraping.ShelterPoteryashka do
   end
 
   def get_pet_photos(body, base_url) do
-    body
-    |> Floki.find("td.eText")
-    |> Floki.find("tr")
-    |> Floki.find("td:first-child")
-    |> Floki.find("img")
-    |> Floki.attribute("src")
-    |> Enum.map(fn photo_url -> base_url <> photo_url end)
+    body =
+      body
+      |> Floki.find("td.eText")
+
+    case Floki.find(body, "div#msg") do
+      [{_tag_name, _attributes, []}] ->
+        body
+        |> Floki.find("tr")
+        |> Floki.find("td:first-child")
+        |> Floki.find("img")
+        |> Floki.attribute("src")
+        |> Enum.map(fn photo_url -> base_url <> photo_url end)
+
+      [{_tag_name, _attributes, children_nodes}] ->
+        children_nodes
+        |> Floki.find("a")
+        |> Floki.attribute("href")
+        |> Enum.map(fn photo_url -> base_url <> photo_url end)
+
+      _ ->
+        []
+    end
   end
 
   def get_pet_description(body) do
@@ -75,11 +90,11 @@ defmodule Fyp.Scraping.ShelterPoteryashka do
     |> Floki.find("td.eText")
     |> Floki.find("tr")
     |> Floki.find("td:last-child")
-    |> IO.inspect
-    |> Floki.text(deep: false)
+    |> Floki.text(sep: "\n")
     |> String.trim_leading()
     |> String.trim_trailing()
     |> String.replace("\u00A0", "")
+    |> String.replace(~r/(\n)+/, "\n")
   end
 end
 
