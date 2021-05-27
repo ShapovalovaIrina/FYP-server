@@ -32,6 +32,11 @@ shelter_data = [
     title: "Центр помощи бездомным животным \"Потеряшка\"",
     vk_link: "https://vk.com/poteryashka_spb",
     site_link: "http://poteryashka.spb.ru/"
+  },
+  %{
+    title: "Благотворительный фонд \"Брошенный ангел\"",
+    vk_link: "https://vk.com/club39102701",
+    site_link: "https://bfba.ru/"
   }
 ]
 
