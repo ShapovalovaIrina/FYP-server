@@ -2,6 +2,7 @@ defmodule ShelterPoteryaskaTest do
   use ExUnit.Case
   import Fyp.Scraping.ShelterPoteryashka
 
+  @tag :skip
   test "Correct parsing with single photo" do
     base_url = "http://poteryashka.spb.ru"
     pet =
@@ -38,6 +39,7 @@ defmodule ShelterPoteryaskaTest do
     assert length(photos) == 1
   end
 
+  @tag :skip
   test "Correct parsing with multiple photos" do
     base_url = "http://poteryashka.spb.ru"
     pet =

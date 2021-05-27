@@ -2,6 +2,7 @@ defmodule ShelterFriendTest do
   use ExUnit.Case
   import Fyp.Scraping.ShelterFriend
 
+  @tag :skip
   test "Correct parsing" do
     base_url = "http://priyut-drug.ru"
     pet_url = ["/take/1/57/"]

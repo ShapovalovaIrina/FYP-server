@@ -13,3 +13,7 @@ end
 defmodule ShelterPoteryashka do
   defstruct [:link]
 end
+
+defmodule ShelterAbandonedAngel do
+  defstruct [:link]
+end
