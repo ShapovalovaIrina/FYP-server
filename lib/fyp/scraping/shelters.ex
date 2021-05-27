@@ -9,3 +9,7 @@ end
 defmodule ShelterIlinka do
   defstruct [:link]
 end
+
+defmodule ShelterPoteryashka do
+  defstruct [:link]
+end

@@ -105,7 +105,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
       "/dogs/puppy-boys/"
     ]
 
-    pets =
+    _pets =
       categories
       |> Enum.reduce([], fn category, acc -> acc ++ get_pets_url(url <> category) end)
       |> get_pets_html_body

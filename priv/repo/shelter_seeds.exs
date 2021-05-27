@@ -27,6 +27,11 @@ shelter_data = [
     title: "Приют \"Ильинка\"",
     vk_link: "https://vk.com/domdog",
     site_link: "http://domdog.ru/"
+  },
+  %{
+    title: "Центр помощи бездомным животным \"Потеряшка\"",
+    vk_link: "https://vk.com/poteryashka_spb",
+    site_link: "http://poteryashka.spb.ru/"
   }
 ]
 
