@@ -58,6 +58,8 @@ defmodule Fyp.Scraping.ShelterIlinka do
     |> Floki.find("p")
     |> Floki.find("strong")
     |> Floki.text()
+    |> String.split("\u00A0", parts: 2)
+    |> hd
   end
 
   def get_pet_photos(body) do
@@ -67,7 +69,6 @@ defmodule Fyp.Scraping.ShelterIlinka do
     |> Floki.find("li")
     |> Floki.find("img")
     |> Floki.attribute("src")
-    |> IO.inspect
   end
 
   def get_pet_birthday(body) do
@@ -77,15 +78,18 @@ defmodule Fyp.Scraping.ShelterIlinka do
     |> Floki.find("p")
     |> Floki.find("strong")
     |> Floki.text()
+    |> String.split("\u00A0", parts: 2)
+    |> Enum.at(1)
   end
 
   def get_pet_description(body) do
     body
     |> Floki.find("div[class=petcard]:first-child")
     |> Floki.find("div.desc")
-    |> Floki.text(deep: false)
-    |> String.replace("\n", "")
-    |> String.replace("\t", "")
+    |> Floki.text(sep: "\n", deep: false)
+    |> String.trim_leading()
+    |> String.trim_trailing()
+    |> String.replace("\u00A0", "")
   end
 end
 
@@ -100,6 +104,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
       "/dogs/puppy-girls/",
       "/dogs/puppy-boys/"
     ]
+
     pets =
       categories
       |> Enum.reduce([], fn category, acc -> acc ++ get_pets_url(url <> category) end)
@@ -117,6 +122,6 @@ defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
           type_id: 1
         }
       end)
-#      |> Enum.each(fn pet -> Fyp.Pets.create(pet) end)
+      |> Enum.each(fn pet -> Fyp.Pets.create(pet) end)
   end
 end
