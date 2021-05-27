@@ -2,6 +2,7 @@ defmodule ShelterIlinkaTest do
   use ExUnit.Case
   import Fyp.Scraping.ShelterIlinka
 
+  @tag :skip
   test "Correct parsing" do
     pet =
       get_pets_html_body(["http://domdog.ru/dogs/352-nika.html"])

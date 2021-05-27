@@ -9,19 +9,17 @@ defmodule Fyp.Scraping.ShelterAbandonedAngel do
          {:ok, html_tree} <- Floki.parse_document(body) do
       pets_html_tree =
         html_tree
-        |> Floki.find("div.col-xs-12")
-        |> Floki.find("div.ms2_product box")
+        |> Floki.find("div[class='ms2_product box']")
 
       have_next =
         html_tree
-        |> Floki.find("ul.paginator")
-        |> Floki.find("li[class=page-item active]+li")
-        |> Floki.find("a")
+        |> Floki.find("ul.pagination")
+        |> Floki.find("li[class='page-item active']+li:not(li[class='page-item disabled'])")
         |> Floki.attribute("href")
 
       case have_next do
         [] -> pets_html_tree
-        [next_page] -> pets_html_tree ++ get_pets_url(next_page, base_url)
+        [next_page] -> pets_html_tree ++ get_pets_html_body(next_page, base_url)
       end
     else
       {:error, %HTTPoison.Response{status_code: 404}} ->
@@ -45,16 +43,17 @@ defmodule Fyp.Scraping.ShelterAbandonedAngel do
     |> Floki.text()
   end
 
-  def get_pet_photos(body) do
+  def get_pet_photos(body, base_url) do
     body
     |> Floki.find("div#msGallery")
-    |> Floki.find("img#fotorama__img")
-    |> Floki.attribute("src")
+    |> Floki.find("a")
+    |> Floki.attribute("href")
+    |> Enum.map(fn photo_url -> base_url <> photo_url end)
   end
 
   def get_pet_description(body) do
     body
-    |> Floki.find("div[class=ms2_product box]>p")
+    |> Floki.find("div[class='ms2_product box']>p")
     |> Floki.text(sep: "\n")
     |> String.trim_leading()
     |> String.trim_trailing()
