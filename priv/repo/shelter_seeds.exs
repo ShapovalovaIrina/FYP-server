@@ -22,6 +22,11 @@ shelter_data = [
     title: "Приют \"Ржевка\"",
     vk_link: "https://vk.com/priut_rgevka",
     site_link: "http://shelter-rzhevka.com/"
+  },
+  %{
+    title: "Приют \"Ильинка\"",
+    vk_link: "https://vk.com/domdog",
+    site_link: "http://domdog.ru/"
   }
 ]
 

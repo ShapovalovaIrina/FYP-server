@@ -9,7 +9,7 @@ defmodule Fyp.Scraping.ShelterFriend do
       urls =
         html_tree
         |> Floki.find("table")
-        # As photo is also a url, but without text
+          # As photo is also a url, but without text
         |> Floki.find("a:fl-contains('')")
         |> Floki.attribute("href")
 
