@@ -17,3 +17,7 @@ end
 defmodule ShelterAbandonedAngel do
   defstruct [:link]
 end
+
+defmodule ShelterRzhevka do
+  defstruct [:owner_id]
+end
