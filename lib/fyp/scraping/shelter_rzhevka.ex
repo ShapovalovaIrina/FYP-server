@@ -6,10 +6,11 @@ defmodule Fyp.Scraping.ShelterRzhevka do
   @access_token "38e8a2b538e8a2b538e8a2b55e3890a7c8338e838e8a2b558580213679eca852175efe3"
   @v "5.77"
 
-  def get_pets_items(owner_id, album_id) do
+  def get_pets_items(owner_id, album_id, count \\ 200) do
     params = [params: [
       owner_id: owner_id,
       album_id: album_id,
+      count: count,
       access_token: @access_token,
       v: @v
     ]]
@@ -37,10 +38,27 @@ defmodule Fyp.Scraping.ShelterRzhevka do
     |> Enum.at(0)
   end
 
-  def get_pet_photos(%{"sizes" => sizes} = _pet_json) do
-    Enum.reduce(sizes, [], fn size, acc ->
-      if size["type"] == "x", do: [size["url"] | acc], else: acc
-    end)
+  def get_pet_photos(%{"sizes" => sizes, "text" => text} = _pet_json) do
+    main_photo =
+      Enum.find(sizes, fn size -> size["type"] == "x" end)
+      |> Map.get("url")
+
+    res = Regex.named_captures(~r/https:\/\/vk.com\/album(?<owner_id>-\d+)_(?<album_id>\d+)/ui, text)
+    case res do
+      %{"owner_id" => owner_id, "album_id" => album_id} ->
+        concatenation = &Enum.concat([main_photo], &1)
+        get_pets_items(owner_id, album_id, 15)
+        |> Enum.map(fn item -> get_pet_photo_single(item) end)
+        |> concatenation.()
+        
+      _ ->
+        [main_photo]
+    end
+  end
+
+  defp get_pet_photo_single(%{"sizes" => sizes} = _pet_json) do
+    Enum.find(sizes, fn size -> size["type"] == "x" end)
+    |> Map.get("url")
   end
 
   def get_pet_description(%{"text" => text} = _pet_json) do

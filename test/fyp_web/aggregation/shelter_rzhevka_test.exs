@@ -2,6 +2,25 @@ defmodule ShelterRzhevkaTest do
   use ExUnit.Case
   import Fyp.Scraping.ShelterRzhevka
 
+  test "Photo parsing" do
+    text = """
+      Жуля\n
+      Дата рождения: 2004 г.\n
+      Опекун: Леонид Ханьков\n
+      В холке: 55 см\n
+      \n
+      Фотоальбом: https://vk.com/album-144985074_249461368\n
+      \n
+      Куратор: нет\n
+      \n
+      Добрая, ласковая девочка.\n
+      Есть проблемы по здоровью\n
+      """
+    res = Regex.named_captures(~r/https:\/\/vk.com\/album(?<owner_id>-\d+)_(?<album_id>\d+)/ui, text)
+    assert res["owner_id"] == "-144985074"
+    assert res["album_id"] == "249461368"
+  end
+
   test "Correct parsing" do
     owner_id = -190703
     albums = [
