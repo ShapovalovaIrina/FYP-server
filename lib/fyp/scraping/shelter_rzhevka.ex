@@ -47,10 +47,10 @@ defmodule Fyp.Scraping.ShelterRzhevka do
     case res do
       %{"owner_id" => owner_id, "album_id" => album_id} ->
         concatenation = &Enum.concat([main_photo], &1)
-        get_pets_items(owner_id, album_id, 15)
+        get_pets_items(owner_id, album_id, 14)
         |> Enum.map(fn item -> get_pet_photo_single(item) end)
         |> concatenation.()
-        
+
       _ ->
         [main_photo]
     end
