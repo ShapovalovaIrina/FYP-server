@@ -44,27 +44,27 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Enum.map(fn {res, response} ->
       with :ok <- res,
            {:ok, html_tree} <- Floki.parse_document(response.body) do
-        html_tree
+        %{source: response.request_url, body: html_tree}
       else
-        _error -> []
+        _error -> %{source: response.request_url, body: []}
       end
     end)
   end
 
-  def get_pet_name(body) do
+  def get_pet_name(%{body: body} = _pet) do
     body
     |> Floki.find("h1")
     |> Floki.text()
   end
 
-  def get_pet_photos(body, base_url) do
+  def get_pet_photos(%{body: body} = _pet, base_url) do
     body
     |> Floki.find("ul.clearing-thumbs, li, a.th")
     |> Floki.attribute("href")
     |> Enum.map(fn photo_url -> base_url <> photo_url end)
   end
 
-  def get_pet_breed(body) do
+  def get_pet_breed(%{body: body} = _pet) do
     body
     |> Floki.find("table")
     |> Floki.find("tr:nth-child(1)")
@@ -72,7 +72,7 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Floki.text()
   end
 
-  def get_pet_gender(body) do
+  def get_pet_gender(%{body: body} = _pet) do
     body
     |> Floki.find("table")
     |> Floki.find("tr:nth-child(2)")
@@ -80,7 +80,7 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Floki.text()
   end
 
-  def get_pet_birthday(body) do
+  def get_pet_birthday(%{body: body} = _pet) do
     body
     |> Floki.find("table")
     |> Floki.find("tr:nth-child(3)")
@@ -88,7 +88,7 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Floki.text()
   end
 
-  def get_pet_height(body) do
+  def get_pet_height(%{body: body} = _pet) do
     body
     |> Floki.find("table")
     |> Floki.find("tr:nth-child(4)")
@@ -96,11 +96,15 @@ defmodule Fyp.Scraping.ShelterFriend do
     |> Floki.text()
   end
 
-  def get_pet_description(body) do
+  def get_pet_description(%{body: body} = _pet) do
     body
     |> Floki.find("p[class=text-justify]")
     |> Floki.find("p:first-of-type")
     |> Floki.text()
+  end
+
+  def get_pet_link(%{source: link} = _pet) do
+    link
   end
 end
 
@@ -123,6 +127,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterFriend do
           height: get_pet_height(body),
           description: get_pet_description(body),
           photos: get_pet_photos(body, url),
+          source_link: get_pet_link(body),
           shelter_id: shelter_id,
           type_id: 1
         }

@@ -46,21 +46,21 @@ defmodule Fyp.Scraping.ShelterPoteryashka do
     |> Enum.map(fn {res, response} ->
       with :ok <- res,
            {:ok, html_tree} <- Floki.parse_document(response.body) do
-        html_tree
+        %{source: response.request_url, body: html_tree}
       else
-        _error -> []
+        _error -> %{source: response.request_url, body: []}
       end
     end)
   end
 
-  def get_pet_name(body) do
+  def get_pet_name(%{body: body} = _pet) do
     body
     |> Floki.find("div.eTitle")
     |> Floki.find("h4")
     |> Floki.text()
   end
 
-  def get_pet_photos(body, base_url) do
+  def get_pet_photos(%{body: body} = _pet, base_url) do
     body =
       body
       |> Floki.find("td.eText")
@@ -85,7 +85,7 @@ defmodule Fyp.Scraping.ShelterPoteryashka do
     end
   end
 
-  def get_pet_description(body) do
+  def get_pet_description(%{body: body} = _pet) do
     body
     |> Floki.find("td.eText")
     |> Floki.find("tr")
@@ -95,6 +95,10 @@ defmodule Fyp.Scraping.ShelterPoteryashka do
     |> String.trim_trailing()
     |> String.replace("\u00A0", "")
     |> String.replace(~r/(\n)+/, "\n")
+  end
+
+  def get_pet_link(%{source: link} = _pet) do
+    link
   end
 end
 
@@ -122,6 +126,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterPoteryashka do
             height: nil,
             description: get_pet_description(body),
             photos: get_pet_photos(body, base_url),
+            source_link: get_pet_link(body),
             shelter_id: shelter_id,
             type_id: type_id
           }

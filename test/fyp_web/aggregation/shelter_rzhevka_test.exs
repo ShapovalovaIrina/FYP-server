@@ -41,6 +41,7 @@ defmodule ShelterRzhevkaTest do
             height: nil,
             description: get_pet_description(pet_item),
             photos: get_pet_photos(pet_item),
+            source_link: get_pet_link(pet_item),
             shelter_id: 2,
             type_id: type_id
           }
@@ -53,5 +54,6 @@ defmodule ShelterRzhevkaTest do
     assert length(first_pet[:photos]) == 1
     assert first_pet[:description] == "Лило\nг.р. 2020\n\nОпекун Яна Соловьёва\nОчень активная, шебутная девочка.\nИмеет опыт проживания в квартире."
     assert first_pet[:name] == "Лило"
+    assert first_pet[:source_link] == "https://vk.com/photo-190703_457280171"
   end
 end

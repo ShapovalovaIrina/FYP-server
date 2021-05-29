@@ -16,6 +16,7 @@ defmodule ShelterPoteryaskaTest do
           height: nil,
           description: get_pet_description(body),
           photos: get_pet_photos(body, base_url),
+          source_link: get_pet_link(body),
           shelter_id: 4,
           type_id: 1
         }
@@ -31,6 +32,7 @@ defmodule ShelterPoteryaskaTest do
              description:
                "Два чудесных щеночка, им всего по 2,5 месяца. Детишки домашние, здоровенькие, упитанные и здоровые.\nЗвоните!",
              photos: _,
+             source_link: "http://poteryashka.spb.ru/load/1-1-0-1754",
              shelter_id: 4,
              type_id: 1
            } = pet
@@ -53,6 +55,7 @@ defmodule ShelterPoteryaskaTest do
           height: nil,
           description: get_pet_description(body),
           photos: get_pet_photos(body, base_url),
+          source_link: get_pet_link(body),
           shelter_id: 4,
           type_id: 1
         }
@@ -68,6 +71,7 @@ defmodule ShelterPoteryaskaTest do
              description:
                "Муся-Трёхцветка - смешная круглая кошечка с золотыми глазами и спокойным нравом. У кисы очень яркий красивый окрас, она точно разбавит собой серые питерские будни и привнесёт в Вашу жизнь яркие краски и тепло. По характеру подойдёт как для взрослых, так и для семей с детьми.\nЗдорова и стерилизована.",
              photos: _,
+             source_link: "http://poteryashka.spb.ru/load/3-1-0-1145",
              shelter_id: 4,
              type_id: 1
            } = pet
