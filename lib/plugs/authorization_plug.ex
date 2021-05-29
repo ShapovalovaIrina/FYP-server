@@ -28,8 +28,7 @@ defmodule AuthorizationPlug do
       true ->
         %{
           id: conn.assigns[:authentication][:claims]["user_id"],
-          email: conn.assigns[:authentication][:claims]["email"],
-          name: conn.assigns[:authentication][:claims]["name"]
+          email: conn.assigns[:authentication][:claims]["email"]
         }
         |> Fyp.Users.ensure_exist()
         conn

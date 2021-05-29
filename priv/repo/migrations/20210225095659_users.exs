@@ -4,7 +4,6 @@ defmodule Fyp.Repo.Migrations.Users do
   def change do
     create table(:users, primary_key: false) do
       add :id, :string, primary_key: true
-      add :name, :string
       add :email, :string
     end
 

@@ -27,7 +27,6 @@ defmodule FavouriteControllerTest do
 
   @user_data %{
     "id" => "123asdrfv7",
-    "name" => "Joe Jonas",
     "email" => "user@mail.com"
   }
 

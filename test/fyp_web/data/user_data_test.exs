@@ -6,7 +6,6 @@ defmodule UserDataTest do
 
   @user_data %{
     id: "123rgb",
-    name: "Username",
     email: "user@mail.com"
   }
 

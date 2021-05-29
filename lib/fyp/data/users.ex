@@ -7,7 +7,7 @@ defmodule Fyp.Users do
 
   require Logger
 
-  def create(%{id: _, name: _, email: _} = user_params, replace_opt \\ :replace_all) do
+  def create(%{id: _, email: _} = user_params, replace_opt \\ :replace_all) do
     opts = [
       on_conflict: replace_opt,
       conflict_target: :id
@@ -49,14 +49,13 @@ defmodule Fyp.Users do
     end
   end
 
-  def ensure_exist(%{id: _, name: _, email: _} = user_params) do
+  def ensure_exist(%{id: _, email: _} = user_params) do
     create(user_params, :nothing)
   end
 
   def map_from_struct(%Users{} = user) do
     Map.take(user, [
       :id,
-      :name,
       :email
     ])
   end
