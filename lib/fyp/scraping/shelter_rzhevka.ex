@@ -64,6 +64,10 @@ defmodule Fyp.Scraping.ShelterRzhevka do
   def get_pet_description(%{"text" => text} = _pet_json) do
     text
   end
+
+  def get_pet_link(%{"owner_id" => owner_id, "id" => id} = _pet_json) do
+    "https://vk.com/photo" <> to_string(owner_id) <> "_" <> to_string(id)
+  end
 end
 
 defimpl Fyp.Scraping.Shelters, for: ShelterRzhevka do
@@ -76,6 +80,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterRzhevka do
       {271095019, 2}, # Puppies
       {183094475, 2}  # Dogs
     ]
+    {:ok, shelter_id} = Fyp.Shelter.get_shelter_by_title("Приют \"Ржевка\"")
 
     _pets =
       Enum.each(albums, fn {album_id, type_id} ->
@@ -89,7 +94,8 @@ defimpl Fyp.Scraping.Shelters, for: ShelterRzhevka do
             height: nil,
             description: get_pet_description(pet_item),
             photos: get_pet_photos(pet_item),
-            shelter_id: 2,
+            source_link: get_pet_link(pet_item),
+            shelter_id: shelter_id,
             type_id: type_id
           }
         end)

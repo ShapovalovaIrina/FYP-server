@@ -15,6 +15,7 @@ defmodule ShelterIlinkaTest do
           height: nil,
           description: get_pet_description(body),
           photos: get_pet_photos(body),
+          source_link: get_pet_link(body),
           shelter_id: 3,
           type_id: 1
         }
@@ -30,6 +31,7 @@ defmodule ShelterIlinkaTest do
              description:
                "Ника - Нескучная Леди. Настоящая аристократка, полная изящества и достоинства. Предательство человека, которое ей пришлось пережить, не сломило ее духа и не лишило горделивой осанки. Стойко приняла она тяготы приютской жизни. Осталась нежной и отзывчивой к людям. Ненавязчива, интеллигентна, любит поиграть. Отлично ходит на поводке. Знает двухразовый выгул. Дружелюбна к детям.\nНика здорова, привита, стерилизована. В холке 57 см\nНаша почта info@domdog.ru\nНаши тлф.\n+7(931)257-40-30 Алена\n+7(906)276-37-01 София",
              photos: _,
+             source_link: "http://domdog.ru/dogs/352-nika.html",
              shelter_id: 3,
              type_id: 1
            } = pet

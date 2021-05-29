@@ -44,14 +44,14 @@ defmodule Fyp.Scraping.ShelterIlinka do
     |> Enum.map(fn {res, response} ->
       with :ok <- res,
            {:ok, html_tree} <- Floki.parse_document(response.body) do
-        html_tree
+        %{source: response.request_url, body: html_tree}
       else
-        _error -> []
+        _error -> %{source: response.request_url, body: []}
       end
     end)
   end
 
-  def get_pet_name(body) do
+  def get_pet_name(%{body: body} = _pet) do
     body
     |> Floki.find("div[class=petcard]:first-child")
     |> Floki.find("div.desc")
@@ -62,7 +62,7 @@ defmodule Fyp.Scraping.ShelterIlinka do
     |> hd
   end
 
-  def get_pet_photos(body) do
+  def get_pet_photos(%{body: body} = _pet) do
     body
     |> Floki.find("div.pics")
     |> Floki.find("ul.thumb")
@@ -71,7 +71,7 @@ defmodule Fyp.Scraping.ShelterIlinka do
     |> Floki.attribute("src")
   end
 
-  def get_pet_birthday(body) do
+  def get_pet_birthday(%{body: body} = _pet) do
     body
     |> Floki.find("div[class=petcard]:first-child")
     |> Floki.find("div.desc")
@@ -82,7 +82,7 @@ defmodule Fyp.Scraping.ShelterIlinka do
     |> Enum.at(1)
   end
 
-  def get_pet_description(body) do
+  def get_pet_description(%{body: body} = _pet) do
     body
     |> Floki.find("div[class=petcard]:first-child")
     |> Floki.find("div.desc")
@@ -90,6 +90,10 @@ defmodule Fyp.Scraping.ShelterIlinka do
     |> String.trim_leading()
     |> String.trim_trailing()
     |> String.replace("\u00A0", "")
+  end
+
+  def get_pet_link(%{source: link} = _pet) do
+    link
   end
 end
 
@@ -104,6 +108,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
       "/dogs/puppy-girls/",
       "/dogs/puppy-boys/"
     ]
+    {:ok, shelter_id} = Fyp.Shelter.get_shelter_by_title("Приют \"Ильинка\"")
 
     _pets =
       categories
@@ -118,7 +123,8 @@ defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
           height: nil,
           description: get_pet_description(body),
           photos: get_pet_photos(body),
-          shelter_id: 3,
+          source_link: get_pet_link(body),
+          shelter_id: shelter_id,
           type_id: 1
         }
       end)

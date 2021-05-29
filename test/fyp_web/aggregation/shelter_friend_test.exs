@@ -18,6 +18,7 @@ defmodule ShelterFriendTest do
           height: get_pet_height(body),
           description: get_pet_description(body),
           photos: get_pet_photos(body, base_url),
+          source_link: get_pet_link(body),
           shelter_id: 0,
           type_id: 1
         }
@@ -30,6 +31,7 @@ defmodule ShelterFriendTest do
              gender: "мальчик",
              birth: "Июл 2012",
              height: "57 см",
+             source_link: "http://priyut-drug.ru/take/1/57/",
              description:
                "Активный, беззлобный, веселый мальчик. Хорошо уживается с другими собаками по вольеру. Приучен к поводку. Не боится людей, не делает разницы между мужчинами и женщинами. Любит погавкать и похулиганить с незнакомыми людьми. Обожает воду, сам заходит в пруд и плавает."
            } = pet

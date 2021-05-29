@@ -38,4 +38,10 @@ defmodule ShelterDataTest do
     shelter_list = Shelter.get_all_shelters()
     assert length(shelter_list) == initial_length + 1
   end
+
+  test "Get shelter by title" do
+    {:ok, shelter} = Shelter.create(@shelter_data)
+    {:ok, shelter_id} = Shelter.get_shelter_by_title(@shelter_data[:title])
+    assert shelter_id == shelter.id
+  end
 end

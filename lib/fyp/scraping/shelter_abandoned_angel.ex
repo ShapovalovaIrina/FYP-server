@@ -10,6 +10,7 @@ defmodule Fyp.Scraping.ShelterAbandonedAngel do
       pets_html_tree =
         html_tree
         |> Floki.find("div[class='ms2_product box']")
+        |> Enum.map(fn pet -> %{source: full_url, body: pet} end)
 
       have_next =
         html_tree
@@ -36,14 +37,14 @@ defmodule Fyp.Scraping.ShelterAbandonedAngel do
     end
   end
 
-  def get_pet_name(body) do
+  def get_pet_name(%{body: body} = _pet) do
     body
     |> Floki.find("form.ms2_form")
     |> Floki.find("h3")
     |> Floki.text()
   end
 
-  def get_pet_photos(body, base_url) do
+  def get_pet_photos(%{body: body} = _pet, base_url) do
     body
     |> Floki.find("div#msGallery")
     |> Floki.find("a")
@@ -51,13 +52,17 @@ defmodule Fyp.Scraping.ShelterAbandonedAngel do
     |> Enum.map(fn photo_url -> base_url <> photo_url end)
   end
 
-  def get_pet_description(body) do
+  def get_pet_description(%{body: body} = _pet) do
     body
     |> Floki.find("div[class='ms2_product box']>p")
     |> Floki.text(sep: "\n")
     |> String.trim_leading()
     |> String.trim_trailing()
     |> String.replace("\u00A0", "")
+  end
+
+  def get_pet_link(%{source: link} = _pet) do
+    link
   end
 end
 
@@ -72,6 +77,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterAbandonedAngel do
       {"/koshki/vzroslyie/", 1},
       {"/koshki/starichki/", 1}
     ]
+    {:ok, shelter_id} = Fyp.Shelter.get_shelter_by_title("Благотворительный фонд \"Брошенный ангел\"")
 
     _pets =
       Enum.each(categories, fn {category_url, type_id} ->
@@ -85,7 +91,8 @@ defimpl Fyp.Scraping.Shelters, for: ShelterAbandonedAngel do
             height: nil,
             description: get_pet_description(body),
             photos: get_pet_photos(body, base_url),
-            shelter_id: 5,
+            source_link: get_pet_link(body),
+            shelter_id: shelter_id,
             type_id: type_id
           }
         end)

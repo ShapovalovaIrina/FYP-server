@@ -24,6 +24,7 @@ defmodule Fyp.Repo.Migrations.Pets do
       add :birth, :string
       add :height, :string
       add :description, :text
+      add :source_link, :string
       add :shelter_id, references(:shelter, column: :id, type: :id)
       add :type_id, references(:type, column: :id, type: :id)
     end
