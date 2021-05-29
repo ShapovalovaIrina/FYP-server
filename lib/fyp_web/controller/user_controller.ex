@@ -22,8 +22,8 @@ defmodule FypWeb.UserController do
     }
 
   def create_user(conn, _params) do
-    %{"user_id" => id, "name" => name, "email" => email} = conn.assigns.authentication.claims
-    case Users.create(%{id: id, name: name, email: email}) do
+    %{"user_id" => id, "email" => email} = conn.assigns.authentication.claims
+    case Users.create(%{id: id, email: email}) do
       {:ok, _id} -> conn |> put_status(201) |> json(successful_status())
       {:error, _reason} -> conn |> put_status(400) |> json(bad_status())
     end
@@ -41,7 +41,7 @@ defmodule FypWeb.UserController do
   def show_user(conn, _params) do
     %{"user_id" => id} = conn.assigns.authentication.claims
     case Users.show(id) do
-      {:ok, user} -> conn |> put_status(200) |> json(Users.map_from_struct(user))
+      {:ok, user} -> conn |> put_status(200) |> json(user)
       {:error, :not_found} -> conn |> put_status(404) |> json(not_found_status())
     end
   end

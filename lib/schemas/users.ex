@@ -6,15 +6,14 @@ defmodule Schemas.Users do
   Schema for users table.
   Fields:
     - id (id)
-    - name (string)
     - email (string)
 
   Many to many relationship with pets through table "favourite_pets".
   """
 
+  @derive {Jason.Encoder, only: [:id, :email]}
   @primary_key {:id, :string, autogenerate: false}
   schema "users" do
-    field :name, :string
     field :email, :string
     many_to_many :pets, Schemas.Pets,
                  join_through: "favourite_pets",
@@ -24,6 +23,6 @@ defmodule Schemas.Users do
 
   def changeset(pet, attrs) do
     pet
-    |> cast(attrs, [:id, :name, :email])
+    |> cast(attrs, [:id, :email])
   end
 end

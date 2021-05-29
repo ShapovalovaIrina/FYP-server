@@ -36,7 +36,6 @@ defmodule FavouriteDataTest do
 
   @user_data %{
     id: "ty6kse",
-    name: "Username",
     email: "user@mail.com"
   }
 

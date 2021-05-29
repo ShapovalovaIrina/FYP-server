@@ -10,13 +10,11 @@ defmodule OpenApi.UsersSchema do
       additionalProperties: false,
       properties: %{
         user_id: %Schema{type: :string, description: "User ID"},
-        email: %Schema{type: :string, description: "Email address", format: :email},
-        name: %Schema{type: :string, description: "User name", pattern: ~r/[a-zA-Z][a-zA-Z0-9_]+/}
+        email: %Schema{type: :string, description: "Email address", format: :email}
       },
       example: %{
         "user_id" => "123asdrfv7",
-        "email" => "user@mail.com",
-        "name" => "Joe Jonas"
+        "email" => "user@mail.com"
       }
     })
   end
