@@ -145,6 +145,7 @@ defmodule Fyp.Pets do
              :birth,
              :height,
              :description,
+             :source_link,
              :photos,
              :shelter,
              :type

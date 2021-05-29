@@ -24,6 +24,7 @@ data =
       "http://priyut-drug.ru/media/photologue/photos/mQDrbrDU_z0.jpg",
       "http://priyut-drug.ru/media/photologue/photos/_ncHhW9vlX4.jpg"
     ],
+    source_link: "http://priyut-drug.ru/take/1/416/",
     shelter_id: 1,
     type_id: 2
   },
@@ -38,6 +39,7 @@ data =
       "http://priyut-drug.ru/media/photologue/photos/8PiwXwuBvxc.jpg",
       "http://priyut-drug.ru/media/photologue/photos/1917dMtps7U.jpg"
     ],
+    source_link: "http://priyut-drug.ru/take/1/403/",
     shelter_id: 1,
     type_id: 2
   },
@@ -52,6 +54,7 @@ data =
       "http://priyut-drug.ru/media/photologue/photos/5uYo8q25Juc.jpg",
       "http://priyut-drug.ru/media/photologue/photos/0v5HQ86wUPk.jpg"
     ],
+    source_link: "http://priyut-drug.ru/take/1/415/",
     shelter_id: 1,
     type_id: 2
   },
@@ -67,6 +70,7 @@ data =
       "http://priyut-drug.ru/media/photologue/photos/IbmZu-iiXOU.jpg",
       "http://priyut-drug.ru/media/photologue/photos/kpVoxCcedhw.jpg"
     ],
+    source_link: "http://priyut-drug.ru/take/1/417/",
     shelter_id: 1,
     type_id: 2
   },
@@ -81,6 +85,7 @@ data =
       "http://priyut-drug.ru/media/photologue/photos/zNG0JXKtqIo.jpg",
       "http://priyut-drug.ru/media/photologue/photos/EKbAxyFiiiM.jpg"
     ],
+    source_link: "http://priyut-drug.ru/take/1/387/",
     shelter_id: 1,
     type_id: 2
   },
@@ -97,6 +102,7 @@ data =
       "http://priyut-drug.ru/media/photologue/photos/7p67VtTc3OA.jpg",
       "http://priyut-drug.ru/media/photologue/photos/v5k2LSCDU-o.jpg"
     ],
+    source_link: "http://priyut-drug.ru/take/1/388/",
     shelter_id: 1,
     type_id: 2
   }

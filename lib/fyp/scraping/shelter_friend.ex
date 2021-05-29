@@ -108,6 +108,8 @@ defimpl Fyp.Scraping.Shelters, for: ShelterFriend do
   import Fyp.Scraping.ShelterFriend
 
   def get_pets(%ShelterFriend{link: url}) do
+    {:ok, shelter_id} = Fyp.Shelter.get_shelter_by_title("Приют \"Друг\"")
+
     # TODO handle errors from get pets url
     _pets =
       get_pets_url(url <> "/take")
@@ -121,7 +123,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterFriend do
           height: get_pet_height(body),
           description: get_pet_description(body),
           photos: get_pet_photos(body, url),
-          shelter_id: 0,
+          shelter_id: shelter_id,
           type_id: 1
         }
       end)

@@ -15,6 +15,7 @@ defmodule PetFilterDataTest do
       "/media/photologue/photos/VTzN9xCbeWg.jpg",
       "/media/photologue/photos/mQDrbrDU_z0.jpg",
       "/media/photologue/photos/xoOK2tMRMOU.jpg"],
+    source_link: "http://priyut-drug.ru/take/1/416/",
     shelter_id: 1,
     type_id: 2
   }

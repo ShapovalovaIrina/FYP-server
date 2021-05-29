@@ -2,6 +2,7 @@ defmodule ShelterRzhevkaTest do
   use ExUnit.Case
   import Fyp.Scraping.ShelterRzhevka
 
+  @tag :skip
   test "Photo parsing" do
     text = """
       Жуля\n
@@ -21,6 +22,7 @@ defmodule ShelterRzhevkaTest do
     assert res["album_id"] == "249461368"
   end
 
+  @tag :skip
   test "Correct parsing" do
     owner_id = -190703
     albums = [

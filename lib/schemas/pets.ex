@@ -12,6 +12,7 @@ defmodule Schemas.Pets do
     - birth (string)
     - height (string)
     - description (string)
+    - source_link (string)
     - shelter_id (id)
     - type_id (id)
 
@@ -24,7 +25,7 @@ defmodule Schemas.Pets do
     :name, :breed, :gender,
     :birth, :height, :description,
     :photos, :shelter, :id,
-    :type
+    :type, :source_link
   ]}
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "pets" do
@@ -34,6 +35,7 @@ defmodule Schemas.Pets do
     field :birth, :string
     field :height, :string
     field :description, :string
+    field :source_link, :string
     has_many :photos, Schemas.Photos
     belongs_to :shelter, Schemas.Shelter, foreign_key: :shelter_id, type: :id
     belongs_to :type, Schemas.Type, foreign_key: :type_id, type: :id
@@ -46,7 +48,7 @@ defmodule Schemas.Pets do
   @doc false
   def changeset(pet, attrs) do
     pet
-    |> cast(attrs, [:id, :name, :breed, :gender, :birth, :height, :description, :shelter_id, :type_id])
-    |> validate_required([:name, :shelter_id, :type_id])
+    |> cast(attrs, [:id, :name, :breed, :gender, :birth, :height, :description, :source_link, :shelter_id, :type_id])
+    |> validate_required([:name, :source_link, :shelter_id, :type_id])
   end
 end

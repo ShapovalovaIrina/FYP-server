@@ -34,6 +34,13 @@ defmodule Fyp.Shelter do
     Repo.all(query)
   end
 
+  def get_shelter_by_title(title) do
+    case Repo.get_by(Shelter, title: title) do
+      nil -> {:error, :not_found}
+      shelter_schema -> {:ok, shelter_schema.id}
+    end
+  end
+
   def shelter_struct_to_shelter_map(%Shelter{} = shelter) do
     Map.take(shelter, [
       :id,

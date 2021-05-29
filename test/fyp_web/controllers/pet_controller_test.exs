@@ -21,6 +21,7 @@ defmodule PetControllerTest do
       "/media/photologue/photos/jpMWEsPU9VI.jpg",
       "/media/photologue/photos/KHqFllxPeAk.jpg",
       "/media/photologue/photos/xoOK2tMRMOU.jpg"],
+    "source_link" => "http://priyut-drug.ru/take/1/416/",
     "shelter_id" => 1,
     "type_id" => 2
   }

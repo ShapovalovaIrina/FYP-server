@@ -76,6 +76,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterRzhevka do
       {271095019, 2}, # Puppies
       {183094475, 2}  # Dogs
     ]
+    {:ok, shelter_id} = Fyp.Shelter.get_shelter_by_title("Приют \"Ржевка\"")
 
     _pets =
       Enum.each(albums, fn {album_id, type_id} ->
@@ -89,7 +90,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterRzhevka do
             height: nil,
             description: get_pet_description(pet_item),
             photos: get_pet_photos(pet_item),
-            shelter_id: 2,
+            shelter_id: shelter_id,
             type_id: type_id
           }
         end)

@@ -104,6 +104,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
       "/dogs/puppy-girls/",
       "/dogs/puppy-boys/"
     ]
+    {:ok, shelter_id} = Fyp.Shelter.get_shelter_by_title("Приют \"Ильинка\"")
 
     _pets =
       categories
@@ -118,7 +119,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterIlinka do
           height: nil,
           description: get_pet_description(body),
           photos: get_pet_photos(body),
-          shelter_id: 3,
+          shelter_id: shelter_id,
           type_id: 1
         }
       end)
