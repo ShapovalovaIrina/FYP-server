@@ -14,10 +14,14 @@ defmodule Fyp.Scraping.ShelterRzhevka do
       access_token: @access_token,
       v: @v
     ]]
+    if count == 200, do: Logger.warn("Get data from https://vk.com/photo" <> to_string(owner_id) <> "_" <> to_string(album_id))
 
     with {:ok, %HTTPoison.Response{status_code: 200, body: body}} <- VKApi.get(@photos_get, [], params),
          {:ok, response} <- Jason.decode(body) do
-      response["response"]["items"] # All items (photos) from album
+      case response["response"]["items"] do # All items (photos) from album
+        nil -> []
+        items -> items
+      end
     else
       {:error, %HTTPoison.Response{status_code: 404}} ->
         Logger.error("HTTPoison. Page is not found")

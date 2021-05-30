@@ -29,8 +29,8 @@ defmodule Fyp.Pets do
     changeset = Pets.changeset(%Pets{}, pet_params)
 
     case Repo.insert(changeset, opts) do
-      {:ok, %Pets{id: uuid}} ->
-        Logger.info("Insert pet with uuid: #{uuid}.")
+      {:ok, %Pets{id: uuid, name: name}} ->
+        Logger.info("Insert pet with uuid: #{uuid}. Name: #{name}")
         res = Photos.create_all(photos, uuid)
         {res, uuid}
 
@@ -38,6 +38,11 @@ defmodule Fyp.Pets do
         Logger.warn("Pet insertion failed. Reason: #{inspect(reason)}")
         :error
     end
+  end
+
+  def pet_count do
+    Repo.all(Pets)
+    |> length()
   end
 
   def pet_list_pagination(type_filter \\ [], shelter_filter \\ [], limit_value \\ 10, cursor \\ nil, direction \\ :after) do

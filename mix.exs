@@ -70,7 +70,7 @@ defmodule Fyp.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/type_seeds.exs", "run priv/repo/shelter_seeds.exs", "run priv/repo/pet_seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/type_seeds.exs", "run priv/repo/shelter_seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "openapi.spec.json --spec FypWeb.ApiSpec", "run priv/repo/type_seeds.exs", "run priv/repo/shelter_seeds.exs", "test"]
     ]

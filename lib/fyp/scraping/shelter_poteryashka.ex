@@ -13,7 +13,6 @@ defmodule Fyp.Scraping.ShelterPoteryashka do
         |> Floki.find("div.eTitle")
         |> Floki.find("a")
         |> Floki.attribute("href")
-        |> IO.inspect
 
       have_next =
         html_tree

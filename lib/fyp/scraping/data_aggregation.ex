@@ -9,7 +9,7 @@ defmodule Fyp.Scraping.DataAggregation do
     %ShelterFriend{link: "http://priyut-drug.ru"},
     %ShelterIlinka{link: "http://domdog.ru"},
     %ShelterPoteryashka{link: "http://poteryashka.spb.ru"},
-    %ShelterAbandonedAngel{link: "https://bfba.ru/"},
+    %ShelterAbandonedAngel{link: "https://bfba.ru"},
     %ShelterRzhevka{owner_id: -190703}
   ]
 

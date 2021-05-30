@@ -16,6 +16,7 @@ defmodule Fyp.Scraping.ShelterAbandonedAngel do
         html_tree
         |> Floki.find("ul.pagination")
         |> Floki.find("li[class='page-item active']+li:not(li[class='page-item disabled'])")
+        |> Floki.find("a")
         |> Floki.attribute("href")
 
       case have_next do
@@ -81,7 +82,7 @@ defimpl Fyp.Scraping.Shelters, for: ShelterAbandonedAngel do
 
     _pets =
       Enum.each(categories, fn {category_url, type_id} ->
-        get_pets_html_body(base_url, category_url)
+        get_pets_html_body(category_url, base_url)
         |> Enum.map(fn body ->
           %{
             name: get_pet_name(body),
