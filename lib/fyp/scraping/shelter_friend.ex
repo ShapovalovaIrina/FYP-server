@@ -5,11 +5,10 @@ defmodule Fyp.Scraping.ShelterFriend do
     Logger.warn("Getting data from #{url}")
 
     with {:ok, %HTTPoison.Response{status_code: 200, body: body}} <- HTTPoison.get(url),
-         {:ok, html_tree} <- Floki.parse_document!(body) do
+         {:ok, html_tree} <- Floki.parse_document(body) do
       urls =
         html_tree
         |> Floki.find("table")
-          # As photo is also a url, but without text
         |> Floki.find("a:fl-contains('')")
         |> Floki.attribute("href")
 
@@ -24,6 +23,10 @@ defmodule Fyp.Scraping.ShelterFriend do
         [next_page] -> urls ++ get_pets_url(url <> next_page)
       end
     else
+      {:ok, %HTTPoison.Response{status_code: status_code, request_url: request_url}} ->
+        Logger.warn("HTTPoison. Status code #{status_code}. request_url: #{request_url}")
+        []
+
       {:error, %HTTPoison.Response{status_code: 404}} ->
         Logger.error("HTTPoison. Page is not found. Url: #{url}")
         []
@@ -114,9 +117,8 @@ defimpl Fyp.Scraping.Shelters, for: ShelterFriend do
   def get_pets(%ShelterFriend{link: url}) do
     {:ok, shelter_id} = Fyp.Shelter.get_shelter_by_title("Приют \"Друг\"")
 
-    # TODO handle errors from get pets url
     _pets =
-      get_pets_url(url <> "/take")
+      get_pets_url(url <> "/take/")
       |> get_pets_html_body(url)
       |> Enum.map(fn body ->
         %{
