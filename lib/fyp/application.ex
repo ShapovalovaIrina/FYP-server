@@ -17,7 +17,7 @@ defmodule Fyp.Application do
       # Start a worker by calling: Fyp.Worker.start_link(arg)
       # {Fyp.Worker, arg}
       worker(Task, [&Fyp.Migrator.migrate/0], restart: :transient),
-      Fyp.Scraping.DataAggregation
+#      Fyp.Scraping.DataAggregation
     ]
 
     additional_children =
