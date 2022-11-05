@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-COPY _build/prod/rel /opt/_build/prod
+COPY _build/prod/rel /opt/_build/prod/rel
 RUN apt-get update && \
     apt-get install libssl1.1
 RUN chmod +x -R /opt/_build/prod/rel
