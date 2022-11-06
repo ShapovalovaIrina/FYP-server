@@ -7,44 +7,44 @@ on:
 #    branches: [ master ]
 
 jobs:
-  build_and_test:
-    name: Build and test
-    runs-on: ubuntu-20.04
-
-    container:
-      image: elixir:1.11.2-alpine
-
-    services:
-      pghost:
-        image: postgres:latest
-        ports: ['5432:5432']
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_DB: fyp
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Install dependencies
-        run: |
-          mix local.rebar --force
-          mix local.hex --force
-          mix deps.get
-
-      - name: Run tests
-        run: mix test
-
-      - name: Upload swagger documentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: OpenAPI
-          path: openapi.json
+#  build_and_test:
+#    name: Build and test
+#    runs-on: ubuntu-20.04
+#
+#    container:
+#      image: elixir:1.11.2-alpine
+#
+#    services:
+#      pghost:
+#        image: postgres:latest
+#        ports: ['5432:5432']
+#        env:
+#          POSTGRES_PASSWORD: postgres
+#          POSTGRES_USER: postgres
+#          POSTGRES_DB: fyp
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v2
+#
+#      - name: Install dependencies
+#        run: |
+#          mix local.rebar --force
+#          mix local.hex --force
+#          mix deps.get
+#
+#      - name: Run tests
+#        run: mix test
+#
+#      - name: Upload swagger documentation
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: OpenAPI
+#          path: openapi.json
 
   release:
     name: Build release
@@ -135,6 +135,7 @@ jobs:
 
       - name: Publish Docker image
         run: |
-          docker tag "${{ secrets.DOCKER_REPO }}" "${{ secrets.DOCKER_REPO }}:${VERSION}"
+          echo ${{ secrets.DOCKER_REPO }}:${VERSION}
+          docker tag ${{ secrets.DOCKER_REPO }} ${{ secrets.DOCKER_REPO }}:${VERSION}
           docker push ${{ secrets.DOCKER_REPO }}:${VERSION}
 
