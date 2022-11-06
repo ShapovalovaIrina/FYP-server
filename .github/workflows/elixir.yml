@@ -2,7 +2,7 @@ name: Elixir CI
 
 on:
   push:
-    branches: [ master ]
+#    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -66,6 +66,11 @@ jobs:
           mix local.hex --force
           mix deps.get
 
+      - name: Run tests
+        run: |
+          mix openapi.spec.json --spec FypWeb.ApiSpec
+          mix test
+
       - name: Release
         run: |
           export MIX_ENV=prod
@@ -96,10 +101,26 @@ jobs:
           name: build
           path: _build/prod/rel
 
+      - name: Prepare variables
+        run: |
+          export APP_NAME=fyp
+          export IMAGE_NAME=${APP_NAME}
+          export APP_VERSION=$(cat mix.exs | grep version | sed -e 's/.*version: *.\\([0-9\\.]\\+\\).,/\\1/')
+          export VERSION=${APP_VERSION}
+          
+          export SERVICE_DIR=opt/service-${VERSION}
+          mkdir -p image-root/opt && cp -rf _build/prod/rel image-root/${SERVICE_DIR}
+
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Container image
-        run: docker build -f docker/Dockerfile -t ${{ secrets.DOCKER_REPO }}:latest .
+        run: |
+          echo "node bin: /${SERVICE_DIR}/${APP_NAME}/bin/${APP_NAME}"
+          docker build -f docker/Dockerfile -t ${{ secrets.DOCKER_REPO }} --build-arg node_bin="/${SERVICE_DIR}/${APP_NAME}/bin/${APP_NAME}" image-root/
+
       - name: Publish Docker image
-        run: docker push ${{ secrets.DOCKER_REPO }}
+        run: |
+          docker tag "${{ secrets.DOCKER_REPO }}" "${{ secrets.DOCKER_REPO }}:${VERSION}"
+          docker push ${{ secrets.DOCKER_REPO }}:${VERSION}
 
