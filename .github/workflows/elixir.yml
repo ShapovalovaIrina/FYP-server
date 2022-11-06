@@ -51,7 +51,7 @@ jobs:
     if: ${{ github.event_name == 'push'}}
 #    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master'}}
     runs-on: ubuntu-20.04
-    needs: [ build_and_test ]
+#    needs: [ build_and_test ]
 
     container:
       image: elixir:1.11.2-alpine
@@ -104,7 +104,8 @@ jobs:
     if: ${{ github.event_name == 'push'}}
 #    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master'}}
     runs-on: ubuntu-20.04
-    needs: [ build_and_test, release ]
+#    needs: [ build_and_test, release ]
+    needs: [ release ]
 
     steps:
       - uses: actions/checkout@v2
