@@ -10,7 +10,8 @@ defmodule Fyp.MixProject do
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      preferred_cli_env: preferred_cli_env()
     ]
   end
 
@@ -27,6 +28,12 @@ defmodule Fyp.MixProject do
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
+
+  defp preferred_cli_env do
+    [
+      "phx.swagger.generate": :test,
+    ]
+  end
 
   # Specifies your project dependencies.
   #
@@ -72,6 +79,7 @@ defmodule Fyp.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/type_seeds.exs", "run priv/repo/shelter_seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "phx.swagger.generate": ["openapi.spec.json --spec FypWeb.ApiSpec --pretty"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "openapi.spec.json --spec FypWeb.ApiSpec", "run priv/repo/type_seeds.exs", "run priv/repo/shelter_seeds.exs", "test"]
     ]
   end

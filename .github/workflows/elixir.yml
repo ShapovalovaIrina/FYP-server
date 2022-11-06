@@ -2,14 +2,56 @@ name: Elixir CI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
 
 jobs:
-  build_and_test:
-    name: Build and test
+#  build_and_test:
+#    name: Build and test
+#    runs-on: ubuntu-20.04
+#
+#    container:
+#      image: elixir:1.11.2-alpine
+#
+#    services:
+#      pghost:
+#        image: postgres:latest
+#        ports: ['5432:5432']
+#        env:
+#          POSTGRES_PASSWORD: postgres
+#          POSTGRES_USER: postgres
+#          POSTGRES_DB: fyp
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v2
+#
+#      - name: Install dependencies
+#        run: |
+#          mix local.rebar --force
+#          mix local.hex --force
+#          mix deps.get
+#
+#      - name: Run tests
+#        run: mix test
+#
+#      - name: Upload swagger documentation
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: OpenAPI
+#          path: openapi.json
+
+  release:
+    name: Build release
+    if: ${{ github.event_name == 'push'}}
+#    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master'}}
     runs-on: ubuntu-20.04
+#    needs: [ build_and_test ]
 
     container:
       image: elixir:1.11.2-alpine
@@ -27,6 +69,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -34,37 +77,13 @@ jobs:
       - name: Install dependencies
         run: |
           mix local.rebar --force
-          mix local.hex --force
+          mix local.hex --force          
           mix deps.get
 
       - name: Run tests
-        run: mix test
-
-      - name: Upload swagger documentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: OpenAPI
-          path: openapi.json
-
-  release:
-    name: Build release
-    if: ${{ github.event_name == 'push'}}
-#    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master'}}
-    runs-on: ubuntu-20.04
-    needs: [ build_and_test ]
-
-    container:
-      image: elixir:1.11.2-alpine
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Install dependencies
         run: |
-          mix local.rebar --force
-          mix local.hex --force
-          mix deps.get
+          mix phx.swagger.generate
+          mix test
 
       - name: Release
         run: |
@@ -85,7 +104,8 @@ jobs:
     if: ${{ github.event_name == 'push'}}
 #    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master'}}
     runs-on: ubuntu-20.04
-    needs: [ build_and_test, release ]
+#    needs: [ build_and_test, release ]
+    needs: [ release ]
 
     steps:
       - uses: actions/checkout@v2
@@ -96,10 +116,24 @@ jobs:
           name: build
           path: _build/prod/rel
 
+      - name: Prepare variables
+        run: |
+          export APP_NAME=fyp
+          export IMAGE_NAME=${APP_NAME}
+          export APP_VERSION=0.1.3
+          export VERSION=${APP_VERSION}
+          
+          export SERVICE_DIR=opt/service-${VERSION}
+          mkdir -p image-root/opt && cp -rf _build/prod/rel image-root/${SERVICE_DIR}
+
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Container image
-        run: docker build -f docker/Dockerfile -t ${{ secrets.DOCKER_REPO }}:latest .
+        run: |
+          echo "node bin: /${SERVICE_DIR}/${APP_NAME}/bin/${APP_NAME}"
+          docker build -f docker/Dockerfile -t ${{ secrets.DOCKER_REPO }}:latest --build-arg node_bin="/${SERVICE_DIR}/${APP_NAME}/bin/${APP_NAME}" image-root/
+
       - name: Publish Docker image
         run: docker push ${{ secrets.DOCKER_REPO }}
 
