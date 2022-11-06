@@ -132,11 +132,8 @@ jobs:
       - name: Build Container image
         run: |
           echo "node bin: /${SERVICE_DIR}/${APP_NAME}/bin/${APP_NAME}"
-          docker build -f docker/Dockerfile -t ${{ secrets.DOCKER_REPO }} --build-arg node_bin="/${SERVICE_DIR}/${APP_NAME}/bin/${APP_NAME}" image-root/
+          docker build -f docker/Dockerfile -t ${{ secrets.DOCKER_REPO }}:latest --build-arg node_bin="/${SERVICE_DIR}/${APP_NAME}/bin/${APP_NAME}" image-root/
 
       - name: Publish Docker image
-        run: |
-          echo ${{ secrets.DOCKER_REPO }}:${VERSION}
-          docker tag ${{ secrets.DOCKER_REPO }} ${{ secrets.DOCKER_REPO }}:${VERSION}
-          docker push ${{ secrets.DOCKER_REPO }}:${VERSION}
+        run: docker push ${{ secrets.DOCKER_REPO }}
 
